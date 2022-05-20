@@ -1,14 +1,44 @@
 # toString ----
 
 #' @importFrom stats na.omit
-#' @importFrom utils head tail
+#' @importFrom utils head tail localeToCharset
 
+d_hsep_factory <- function() {
+    warn_sent <- FALSE
+    function() {
+        if(any(grepl("^UTF", localeToCharset())))
+            "\u2014"
+        else {
+            if(!warn_sent) {
+                warning("Detected non-UTF charset. Falling back to '-' ",
+                        "as default header/body separator. This warning ",
+                        "will only be shown once per R session.")
+                warn_sent <<- TRUE
+            }
+            "-"
+        }
+    }
+}
+
+#' Default horizontal Separator
+#'
+#' The default horizontal separator character which can be
+#' displayed in the current charset for use in rendering table-likes.
+#'
+#' @return unicode 2014 (long dash for generating solid horizontal line)
+#' if in a locale that uses a UTF character set, otherwise an ASCII hyphen
+#' with a once-per-session warning.
+#'
+#' @export
+#' @examples
+#' default_hsep()
+default_hsep <- d_hsep_factory()
 
 
 #' @rdname tostring
 #' @param widths (proposed) widths for the columns of \code{x}
 #' @param col_gap numeric(1). Space between columns
-#' @param linesep character(1). Characters to repeat to create header/body
+#' @param hsep character(1). Characters to repeat to create header/body
 #' separator line.
 #' @exportMethod toString
 #' @examples
@@ -19,7 +49,7 @@
 setMethod("toString", "MatrixPrintForm", function(x,
                                                   widths = NULL,
                                                   col_gap = 3,
-                                                  linesep = "\u2014") {
+                                                  hsep = default_hsep()) {
     mat <- x
 
   ## we create a matrix with the formatted cell contents
@@ -81,7 +111,7 @@ setMethod("toString", "MatrixPrintForm", function(x,
   gap_str <- strrep(" ", col_gap)
 
   ncchar <-  sum(widths) + (length(widths) - 1) * col_gap
-  div <- substr(strrep(linesep, ncchar), 1, ncchar)
+  div <- substr(strrep(hsep, ncchar), 1, ncchar)
 
   txt_head <- apply(head(content, nl_header), 1, .paste_no_na, collapse = gap_str)
   txt_body <- apply(tail(content, -nl_header), 1, .paste_no_na, collapse = gap_str)
@@ -99,16 +129,17 @@ setMethod("toString", "MatrixPrintForm", function(x,
 
 })
 
-pad_vert_center <- function(x, len) {
-    needed <- len - length(x)
-    if(needed < 0) stop("got vector already longer than target length this shouldn't happen")
-    if(needed > 0) {
-        bf <- ceiling(needed/2)
-        af <- needed - bf
-        x <- c(if(bf > 0) rep("", bf), x, if(af > 0) rep("", af))
-    }
-    x
-}
+
+## pad_vert_center <- function(x, len) {
+##     needed <- len - length(x)
+##     if(needed < 0) stop("got vector already longer than target length this shouldn't happen")
+##     if(needed > 0) {
+##         bf <- ceiling(needed/2)
+##         af <- needed - bf
+##         x <- c(if(bf > 0) rep("", bf), x, if(af > 0) rep("", af))
+##     }
+##     x
+## }
 
 pad_vert_top <- function(x, len) {
     c(x, rep("", len - length(x)))

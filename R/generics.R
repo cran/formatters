@@ -41,6 +41,8 @@
 #' @export
 #' @return a data.frame of row/column-structure information used by the pagination machinery.
 #' @rdname make_row_df
+#'
+## nocov start
 setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                   rownum = 0,
                                   indent = 0L,
@@ -50,10 +52,7 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                   repr_inds = integer(),
                                   sibpos = NA_integer_,
                                   nsibs = NA_integer_) standardGeneric("make_row_df"))
-
-
-
-
+## nocov end
 
 
 #' Transform rtable to a list of matrices which can be used for outputting
@@ -63,8 +62,9 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
 #'
 #' @param obj ANY. Object to be transformed into a ready-to-render form (a MatrixPrintForm object)
 #' @param indent_rownames logical(1), if TRUE the column with the row names in the `strings` matrix of has indented row
-#'   names (strings pre-fixed)
-#'
+#' names (strings pre-fixed)
+#' @param indent_size numeric(1). Number of spaces to be used per level of indent (if supported by
+#' the relevant method). Defaults to 2.
 #' @export
 #'
 #' @details
@@ -82,11 +82,14 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
 #'
 #' With an additional \code{nrow_header} attribute indicating the number of pseudo "rows"  the
 #' column structure defines.
-setGeneric("matrix_form", function(obj, indent_rownames = FALSE) standardGeneric("matrix_form"))
+setGeneric("matrix_form", function(obj, indent_rownames = FALSE,
+                                   indent_size = 2) standardGeneric("matrix_form"))
 
 #' @rdname matrix_form
 #' @export
-setMethod("matrix_form", "MatrixPrintForm", function(obj, indent_rownames = FALSE) obj)
+setMethod("matrix_form", "MatrixPrintForm", function(obj,
+                                                     indent_rownames = FALSE,
+                                                     indent_size = 2) obj)
 
 
 ## Generics for toString and helper functions
@@ -157,14 +160,14 @@ setMethod("nlines", "character", function(x, colwidths) max(vapply(strsplit(x, "
 setGeneric("toString", function(x,...) standardGeneric("toString"))
 
 ## preserve S3 behavior
-setMethod("toString", "ANY", base::toString)
+setMethod("toString", "ANY", base::toString) ## nocov
 
 #' @title Print
 #'
 #' Print an R object. see \code{[base::print()]}
 #' @inheritParams base::print
 #' @rdname basemethods
-setMethod("print", "ANY", base::print)
+setMethod("print", "ANY", base::print) ## nocov
 
 
 
@@ -262,7 +265,7 @@ setGeneric("main_title<-", function(obj, value) standardGeneric("main_title<-"))
 
 #' @export
 #' @rdname title_footer
-setGeneric("subtitles", function(obj) standardGeneric("subtitles"))
+setGeneric("subtitles", function(obj) standardGeneric("subtitles")) ## nocov
 
 #' @export
 #' @rdname title_footer
@@ -271,7 +274,7 @@ setMethod("subtitles", "MatrixPrintForm",
 
 ##' @rdname title_footer
 ##' @export
-setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-"))
+setGeneric("subtitles<-", function(obj, value) standardGeneric("subtitles<-")) ## nocov
 
 #' @export
 #' @rdname title_footer
@@ -308,7 +311,7 @@ setGeneric("main_footer", function(obj) standardGeneric("main_footer"))
 #' @export
 #' @rdname title_footer
 setMethod("main_footer", "MatrixPrintForm",
-          function(obj) attr(obj, "footer"))
+          function(obj) obj$main_footer)
 
 #' @rdname title_footer
 #' @param value character. New value.
