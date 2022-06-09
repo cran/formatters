@@ -1,13 +1,13 @@
-e7e77da444ee03429aab05e7269df17e *DESCRIPTION
+d2958f38559c8d404649ea4d8254e011 *DESCRIPTION
 6aa88d4d8861a39b4a8dfc2b400ab12d *NAMESPACE
-ea926e816fe5c09be64b252095a915b6 *NEWS.md
+cb4149e5fa0f7733747c3a818476b91f *NEWS.md
 314a32b40cea258564d5ae79b46757b2 *R/data.R
 bfb72804385539c7abfaa8bca9cfc9e3 *R/format_value.R
 888f3faeae81026edda1ab850b1b97de *R/generics.R
 387dceec5d7e232527eefbde8b529495 *R/labels.R
 8a1d33d3d3452c14a9114ef38b9d8db7 *R/matrix_form.R
 f0610a6ac21f6050dc86cd1adb7a9e26 *R/pagination.R
-8247260887c4438796edd3a38f0635b3 *R/tostring.R
+c82e9d7988758165bace6d63da6c01d9 *R/tostring.R
 cb12b93402d63474e409587d9e84e6f3 *R/utils.R
 6b8c27db8cdf49e9955a5bc6ff6084a6 *README.md
 50c18ca29410f1f8272900709495a479 *build/vignette.rds
@@ -24,7 +24,7 @@ c1599fee8a82aafd313d249a867c2fd6 *data/ex_adtte.rda
 bb19ffcf9f28fc26c323d51c19c34f5d *data/ex_advs.rda
 9304f3aec4acccbffd7c8117b5260794 *inst/doc/formatters.R
 c542be3e054e8734b6ad8d0204af356a *inst/doc/formatters.Rmd
-bd7b52821e73456940a53b52aa50d6b9 *inst/doc/formatters.html
+6f3f6f55765771b169155ae6080da367 *inst/doc/formatters.html
 5c73b6635c431974b1bd2a11a8b6b442 *man/DM.Rd
 ccc5d4125a4d7bf5925b69da77102582 *man/basemethods.Rd
 a28c5cdd216002c77b555695aeec89ee *man/basic_matrix_form.Rd
