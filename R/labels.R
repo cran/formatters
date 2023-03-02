@@ -11,11 +11,11 @@
 #' @return \code{x} labeled by \code{label}. Note: the exact mechanism of labeling should be
 #' considered an internal implementation detail, but the label will always be retrieved via \code{obj_label}.
 #' @examples
-#' x <- with_label(c(1,2,3), label = "Test")
+#' x <- with_label(c(1, 2, 3), label = "Test")
 #' obj_label(x)
 with_label <- function(x, label) {
-    obj_label(x) <- label
-    x
+  obj_label(x) <- label
+  x
 }
 
 
@@ -41,6 +41,9 @@ with_label <- function(x, label) {
 #' var_labels(x)
 var_labels <- function(x, fill = FALSE) {
   stopifnot(is.data.frame(x))
+  if (NCOL(x) == 0) {
+    return(character())
+  }
 
   y <- Map(function(col, colname) {
     label <- attr(col, "label")
@@ -57,7 +60,6 @@ var_labels <- function(x, fill = FALSE) {
       }
       as.vector(label)
     }
-
   }, x, colnames(x))
 
   labels <- unlist(y, recursive = FALSE, use.names = TRUE)
@@ -67,7 +69,6 @@ var_labels <- function(x, fill = FALSE) {
   }
 
   labels
-
 }
 
 
@@ -89,8 +90,8 @@ var_labels <- function(x, fill = FALSE) {
 #' var_labels(x) <- paste("label for", names(iris))
 #' var_labels(x)
 #'
-#' if(interactive()){
-#' View(x) # in RStudio data viewer labels are displayed
+#' if (interactive()) {
+#'   View(x) # in RStudio data viewer labels are displayed
 #' }
 `var_labels<-` <- function(x, value) {
   stopifnot(
@@ -99,8 +100,9 @@ var_labels <- function(x, fill = FALSE) {
     ncol(x) == length(value)
   )
 
+  theseq <- if (!is.null(names(value))) names(value) else seq_along(x)
   # across columns of x
-  for (j in seq_along(x)) {
+  for (j in theseq) {
     attr(x[[j]], "label") <- if (!is.na(value[j])) {
       value[j]
     } else {
@@ -131,7 +133,9 @@ var_labels <- function(x, fill = FALSE) {
 var_relabel <- function(x, ...) {
   # todo: make this function more readable / code easier
   stopifnot(is.data.frame(x))
-  if (missing(...)) {return(x)}
+  if (missing(...)) {
+    return(x)
+  }
   dots <- list(...)
   varnames <- names(dots)
   stopifnot(!is.null(varnames))
@@ -147,7 +151,7 @@ var_relabel <- function(x, ...) {
   }
 
   for (i in seq_along(map_varnames)) {
-    attr(x[[map_varnames[[i]]]], "label") <-  dots[[i]]
+    attr(x[[map_varnames[[i]]]], "label") <- dots[[i]]
   }
 
   x
@@ -169,7 +173,7 @@ var_relabel <- function(x, ...) {
 var_labels_remove <- function(x) {
   stopifnot(is.data.frame(x))
 
-  for (i in 1:ncol(x)) {
+  for (i in seq_len(ncol(x))) {
     attr(x[[i]], "label") <- NULL
   }
 

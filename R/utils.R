@@ -2,7 +2,7 @@
 ## this one tiny utility function is NOT worth a dependency.
 ## modified it so any length 0 x grabs y
 
-#' '\%||\%' If length-0 alternative operator
+#' `%||%` If length-0 alternative operator
 #' @name ifnotlen0
 #'
 #'
@@ -16,6 +16,6 @@
 #' character() %||% "hi"
 #'
 #' NULL %||% "hi"
-#'@return `a`, unless it  is length 0, in which case  `b` (even in the
+#' @return `a`, unless it  is length 0, in which case  `b` (even in the
 #'     case `b` is also length 0)
-`%||%` <- function(a, b) if(length(a) == 0) b else a
+`%||%` <- function(a, b) if (length(a) == 0) b else a

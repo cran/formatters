@@ -19,12 +19,12 @@ library(formatters)
 
 # formatters
 
-The `formatters` package provides two core pieces of functionality, both relatead to ASCII rendering:
+The `formatters` package provides two core pieces of functionality, both related to ASCII rendering:
 
 1. `format_value` provides the ability to format single- and multi-valued elements into ASCII display-ready strings
 2. the `matrix_form` framework provides generics for implementing ASCII rendering support for display tables
 
-Both of these featuresets are used in the `rtables` package.
+Both of these feature sets are used in the `rtables` package.
 
 # Formatting values
 
@@ -44,7 +44,7 @@ calling the `list_valid_format_labels` function:
 list_valid_format_labels()
 ```
 
-Each of these labels desceribes how the incoming (possibly
+Each of these labels describes how the incoming (possibly
 multi-element) raw value will be formatted. `xx` indicates that an
 element of the value will be printed as is, with no
 modification. `xx.` indicates that a numeric value element will be
@@ -91,47 +91,55 @@ We can build a baby example method for `data.frames` to illustrate this process:
 ## nm (name), lab (label), rnum (absolute row position), pth ("path"),
 ## extent (how many lines it takes up), rclass ("class of row")
 fake_pagdf_row <- function(i, rnms) {
-    nm <- rnms[i]
-    pagdfrow(nm = nm, lab = nm, rnum = i, pth = nm, extent = 1L,
-             rclass = "NA")
+  nm <- rnms[i]
+  pagdfrow(
+    nm = nm, lab = nm, rnum = i, pth = nm, extent = 1L,
+    rclass = "NA"
+  )
 }
 
 matrix_form.data.frame <- function(df) {
-    fmts <- lapply(df, function(x) if(is.null(obj_format(x))) "xx" else obj_format(x))
+  fmts <- lapply(df, function(x) if (is.null(obj_format(x))) "xx" else obj_format(x))
 
-    bodystrs <- mapply(function(x, fmt) {
-        sapply(x, format_value, format = fmt)
-    }, x = df, fmt = fmts)
+  bodystrs <- mapply(function(x, fmt) {
+    sapply(x, format_value, format = fmt)
+  }, x = df, fmt = fmts)
 
-    rnms <- row.names(df)
-    if(is.null(rnms))
-        rnms <- as.character(seq_len(NROW(df)))
+  rnms <- row.names(df)
+  if (is.null(rnms)) {
+    rnms <- as.character(seq_len(NROW(df)))
+  }
 
-    cnms <- names(df)
+  cnms <- names(df)
 
-    strings <- rbind(c("", cnms),
-                     cbind(rnms, bodystrs))
+  strings <- rbind(
+    c("", cnms),
+    cbind(rnms, bodystrs)
+  )
 
-    fnr <- nrow(strings)
-    fnc <- ncol(strings)
+  fnr <- nrow(strings)
+  fnc <- ncol(strings)
 
-    ## center alignment for column labels, left alignment for everything else
-    aligns <- rbind("center",
-                    matrix("left", nrow = NROW(df), ncol = fnc))
+  ## center alignment for column labels, left alignment for everything else
+  aligns <- rbind(
+    "center",
+    matrix("left", nrow = NROW(df), ncol = fnc)
+  )
 
-   
-    ## build up fake pagination df, 
-    rowdf <- basic_pagdf(row.names(df))
-    matrix_print_form(strings = strings,
-                      aligns = aligns,
-                      spans = matrix(1, nrow = fnr, ncol = fnc),
-                      formats = NULL,
-                      row_info = rowdf,
-                      has_topleft = FALSE,
-                      nlines_header = 1,
-                      nrow_header = 1)
+
+  ## build up fake pagination df,
+  rowdf <- basic_pagdf(row.names(df))
+  matrix_print_form(
+    strings = strings,
+    aligns = aligns,
+    spans = matrix(1, nrow = fnr, ncol = fnc),
+    formats = NULL,
+    row_info = rowdf,
+    has_topleft = FALSE,
+    nlines_header = 1,
+    nrow_header = 1
+  )
 }
-                      
 
 cat(toString(matrix_form.data.frame(mtcars)))
 ```

@@ -13,13 +13,18 @@ format_value(x, format = NULL, output = c("ascii", "html"), na_str = "NA")
 
 \item{output}{character(1). output type}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 }
 \value{
 formatted text representing the cell \code{x}.
 }
 \description{
 Converts a (possibly compound) value into a string using the \code{format} information
+}
+\details{
+A length-zero value for \code{na_str} will be interpreted as \code{"NA"}, as will any
+missing values within a non-length-zero \code{na_str} vector.
 }
 \examples{
 
@@ -30,5 +35,5 @@ format_value(x, output = "ascii")
 
 }
 \seealso{
-[round_fmt()]
+\code{\link[=round_fmt]{round_fmt()}}
 }

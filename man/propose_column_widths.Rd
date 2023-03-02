@@ -2,12 +2,17 @@
 % Please edit documentation in R/tostring.R
 \name{propose_column_widths}
 \alias{propose_column_widths}
-\title{Propose Column Widths based on an object's `MatrixPrintForm` form}
+\title{Propose Column Widths based on an object's \code{MatrixPrintForm} form}
 \usage{
-propose_column_widths(x)
+propose_column_widths(x, indent_size = 2)
 }
 \arguments{
-\item{x}{MatrixPrintForm object}
+\item{x}{MatrixPrintForm object, or an object with a \code{matrix_form}
+method.}
+
+\item{indent_size}{numeric(1). Indent size in characters. Ignored
+when \code{x} is already a MatrixPrintForm object in favor of information
+there.}
 }
 \value{
 a vector of column widths based on the content of \code{x}

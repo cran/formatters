@@ -3,38 +3,61 @@
 \name{toString}
 \alias{toString}
 \alias{toString,MatrixPrintForm-method}
-\title{toString
-
-Transform a complex object into a string representation ready
-to be printed or written to a plain-text file}
+\title{toString}
 \usage{
 toString(x, ...)
 
-\S4method{toString}{MatrixPrintForm}(x, widths = NULL, col_gap = 3, hsep = default_hsep())
+\S4method{toString}{MatrixPrintForm}(
+  x,
+  widths = NULL,
+  tf_wrap = FALSE,
+  max_width = NULL,
+  col_gap = x$col_gap,
+  hsep = default_hsep()
+)
 }
 \arguments{
 \item{x}{ANY. Object to be prepared for rendering.}
 
 \item{...}{Passed to individual methods.}
 
-\item{widths}{(proposed) widths for the columns of \code{x}}
+\item{widths}{numeric (or  NULL). (proposed) widths for the columns
+of \code{x}. The expected length  of this numeric vector can be
+retrieved with  \code{ncol() + 1}  as the  column of row  names must
+also be considered.}
 
-\item{col_gap}{numeric(1). Space between columns}
+\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
+and footnotes be wrapped?}
 
-\item{hsep}{character(1). Characters to repeat to create header/body
-separator line.}
+\item{max_width}{integer(1), character(1) or NULL. Width that title
+and   footer   (including   footnotes)  materials   should   be
+word-wrapped to. If NULL, it is  set to the current print width
+of the  session (\code{getOption("width")}). If set to \code{"auto"},
+the width of the table (plus any table inset) is used. Ignored
+completely if \code{tf_wrap} is \code{FALSE}.}
+
+\item{col_gap}{numeric(1). Space (in characters) between columns}
+
+\item{hsep}{character(1).   Characters  to  repeat   to  create
+header/body separator line.}
 }
 \value{
 A character string containing the ASCII rendering
-of the table-like object reprseented by `x`
+of the table-like object represented by \code{x}
 }
 \description{
-toString
-
 Transform a complex object into a string representation ready
 to be printed or written to a plain-text file
+}
+\details{
+Manual insertion of newlines is not supported when \code{tf_wrap} is on
+and will result in a warning and undefined wrapping behavior. Passing
+vectors of already split strings remains supported, however in this
+case each string is word-wrapped separately with the behavior
+described above.
 }
 \examples{
 mform <- basic_matrix_form(mtcars)
 cat(toString(mform))
+
 }

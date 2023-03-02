@@ -2,27 +2,40 @@
 % Please edit documentation in R/pagination.R
 \name{vert_pag_indices}
 \alias{vert_pag_indices}
-\title{Find Column Indicies for Vertical Pagination}
+\title{Find Column Indices for Vertical Pagination}
 \usage{
-vert_pag_indices(obj, cpp = 40, verbose = FALSE)
+vert_pag_indices(
+  obj,
+  cpp = 40,
+  colwidths = NULL,
+  verbose = FALSE,
+  rep_cols = 0L
+)
 }
 \arguments{
-\item{obj}{ANY. object to be paginated. Must have a \code{\link{matrix_form}} method.}
+\item{obj}{ANY.  object   to   be  paginated.   Must  have   a
+\code{\link{matrix_form}} method.}
 
-\item{cpp}{numeric(1). Number of columns per page}
+\item{cpp}{numeric(1). Number of characters per page (width)}
+
+\item{colwidths}{numeric vector.  Column widths (in characters) for
+use with vertical pagination.}
 
 \item{verbose}{logical(1). Should additional informative messages about the search for
 pagination breaks be shown. Defaults to \code{FALSE}.}
+
+\item{rep_cols}{numeric(1). Number of \emph{columns} (not including
+row labels) to be repeated on every page. Defaults to 0}
 }
 \value{
 A list partitioning the vector of column indices
-into subsets for 1 or more vertically paginated pages.
+into subsets for 1 or more horizontally paginated pages.
 }
 \description{
-Find Column Indicies for Vertical Pagination
+Find Column Indices for Vertical Pagination
 }
 \examples{
 mf <- basic_matrix_form(df = mtcars)
 colpaginds <- vert_pag_indices(mf)
-lapply(colpaginds, function(j) mtcars[,j, drop = FALSE])
+lapply(colpaginds, function(j) mtcars[, j, drop = FALSE])
 }

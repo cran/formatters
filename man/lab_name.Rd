@@ -12,10 +12,11 @@
 \alias{obj_format,ANY-method}
 \alias{obj_format<-}
 \alias{obj_format<-,ANY-method}
-\title{Label, Name and Format accessor generics
-
-Getters and setters for basic, relatively universal attributes
-of "table-like" objects"}
+\alias{obj_na_str}
+\alias{obj_na_str,ANY-method}
+\alias{obj_na_str<-}
+\alias{obj_na_str<-,ANY-method}
+\title{Label, Name and Format accessor generics}
 \usage{
 obj_name(obj)
 
@@ -36,6 +37,14 @@ obj_format(obj)
 obj_format(obj) <- value
 
 \S4method{obj_format}{ANY}(obj) <- value
+
+obj_na_str(obj)
+
+\S4method{obj_na_str}{ANY}(obj)
+
+obj_na_str(obj) <- value
+
+\S4method{obj_na_str}{ANY}(obj) <- value
 }
 \arguments{
 \item{obj}{ANY. The object.}
@@ -47,8 +56,6 @@ the name, format or label of \code{obj} for getters, or \code{obj} after modific
 for setters.
 }
 \description{
-Label, Name and Format accessor generics
-
 Getters and setters for basic, relatively universal attributes
 of "table-like" objects"
 }

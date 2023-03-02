@@ -6,26 +6,6 @@
 \alias{matrix_print_form}
 \title{Matrix Print Form - Intermediate Representation for ASCII Table Printing}
 \usage{
-matrix_print_form(
-  strings = NULL,
-  spans,
-  aligns,
-  formats,
-  row_info,
-  line_grouping = seq_len(NROW(strings)),
-  ref_fnotes = list(),
-  nlines_header,
-  nrow_header,
-  has_topleft = TRUE,
-  has_rowlabs = has_topleft,
-  expand_newlines = TRUE,
-  main_title = "",
-  subtitles = character(),
-  page_titles = character(),
-  main_footer = "",
-  prov_footer = character()
-)
-
 MatrixPrintForm(
   strings = NULL,
   spans,
@@ -43,7 +23,33 @@ MatrixPrintForm(
   subtitles = character(),
   page_titles = character(),
   main_footer = "",
-  prov_footer = character()
+  prov_footer = character(),
+  col_gap = 3,
+  table_inset = 0L,
+  indent_size = 2
+)
+
+matrix_print_form(
+  strings = NULL,
+  spans,
+  aligns,
+  formats,
+  row_info,
+  line_grouping = seq_len(NROW(strings)),
+  ref_fnotes = list(),
+  nlines_header,
+  nrow_header,
+  has_topleft = TRUE,
+  has_rowlabs = has_topleft,
+  expand_newlines = TRUE,
+  main_title = "",
+  subtitles = character(),
+  page_titles = character(),
+  main_footer = "",
+  prov_footer = character(),
+  col_gap = 3,
+  table_inset = 0L,
+  indent_size = 2
 )
 }
 \arguments{
@@ -74,13 +80,13 @@ necessary for pagination (XXX document exactly what that is).}
 \item{line_grouping}{integer. Sequence of  integers indicating how
 print  lines  correspond  to   semantic  rows  in  the  object.
 Typically   this   should   not    be   set   manually   unless
-expact_newlines is set to \code{FALSE}.}
+\code{expact_newlines} is set to \code{FALSE}.}
 
 \item{ref_fnotes}{list.   Referential  footnote  information  if
 applicable.}
 
 \item{nlines_header}{numeric(1). Number  of lines taken up  by the
-values of the header (ie not including the divider).}
+values of the header (i.e. not including the divider).}
 
 \item{nrow_header}{numeric(1).  Number of \emph{rows} corresponding
 to the header.}
@@ -111,19 +117,27 @@ vector.}
 
 \item{prov_footer}{character.  Provenance footer  information as a
 character vector.}
+
+\item{col_gap}{numeric(1). Space (in characters) between columns}
+
+\item{table_inset}{numeric(1). Table inset. See
+\code{\link{table_inset}}}
+
+\item{indent_size}{numeric(1). Number of spaces to be used per level of indent (if supported by
+the relevant method). Defaults to 2.}
 }
 \value{
-An object of class `MatrixPrintForm`. Currently this is
+An object of class \code{MatrixPrintForm}. Currently this is
 implemented as an S3 class inheriting from list with the following
 elements:
 \describe{
 \item{\code{strings}}{see argument}
 \item{\code{spans}}{see argument}
 \item{\code{aligns}}{see argument}
-\item{\code{display}}{logical matrix of same dimension as `strings`
-that specifies whether an element in `strings` will be displayed
+\item{\code{display}}{logical matrix of same dimension as \code{strings}
+that specifies whether an element in \code{strings} will be displayed
 when the table is rendered}
-\item{\code{formats}}{see arugment}
+\item{\code{formats}}{see argument}
 \item{\code{row_info}}{see argument}
 \item{\code{line_grouping}}{see argument}
 \item{\code{ref_footnotes}}{see argument}
@@ -132,6 +146,8 @@ when the table is rendered}
 \item{\code{page_titles}}{see argument}
 \item{\code{main_footer}}{see argument}
 \item{\code{prov_footer}}{see argument}
+\item{\code{col_gap}}{see argument}
+\item{\code{table_inset}}{see argument}
 }
 
 as well as the following attributes:
@@ -143,6 +159,6 @@ any row names/row labels}
 }
 }
 \description{
-This should generally only be called by `matrix_form` custom
+This should generally only be called by \code{matrix_form} custom
 methods, and almost never from other code.
 }

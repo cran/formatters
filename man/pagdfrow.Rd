@@ -22,7 +22,8 @@ pagdfrow(
   ncellrefs = 0L,
   nreflines = 0L,
   force_page = FALSE,
-  page_title = NA_character_
+  page_title = NA_character_,
+  trailing_sep = NA_character_
 )
 }
 \arguments{
@@ -39,15 +40,16 @@ be retrieved, respectively.}
 
 \item{pth}{character or NULL. Path within larger table}
 
-\item{sibpos}{integer(1). Position amongst sibling rows}
+\item{sibpos}{integer(1). Position among sibling rows}
 
-\item{nsibs}{integer(1). Number of siblings}
+\item{nsibs}{integer(1). Number of siblings (including self).}
 
-\item{extent}{numberic(1). Number of lines required to print the row}
+\item{extent}{numeric(1). Number of lines required to print the row}
 
 \item{colwidths}{numeric. Column widths}
 
-\item{repext}{integer(1). Number of lines required to reprint all context for this row if it appears directly after pagination.}
+\item{repext}{integer(1). Number of lines required to reprint all context for this row if it appears directly
+after pagination.}
 
 \item{repind}{integer. Vector of row numbers to be reprinted if this row appears directly after pagination.}
 
@@ -64,6 +66,9 @@ be retrieved, respectively.}
 \item{force_page}{logical(1). Currently Ignored.}
 
 \item{page_title}{logical(1). Currently Ignored.}
+
+\item{trailing_sep}{character(1). The string to used as a separator below this row during printing (or
+\code{NA_character_} for no separator).}
 }
 \value{
 a single row data.frame with the columns appropriate for a pagination info data frame.
