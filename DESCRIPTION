@@ -1,7 +1,7 @@
 Package: formatters
 Title: ASCII Formatting for Values and Tables
-Version: 0.4.1
-Date: 2023-04-12
+Version: 0.5.0
+Date: 2023-04-19
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
@@ -28,11 +28,11 @@ Collate: 'data.R' 'format_value.R' 'matrix_form.R' 'generics.R'
         'labels.R' 'mpf_exporters.R' 'page_size.R' 'pagination.R'
         'tostring.R' 'utils.R'
 NeedsCompilation: no
-Packaged: 2023-04-14 23:24:11 UTC; gabrielbecker
+Packaged: 2023-05-18 22:43:56 UTC; root
 Author: Gabriel Becker [aut, cre],
   Adrian Waddell [aut],
   Davide Garolini [ctb],
   F. Hoffmann-La Roche AG [cph, fnd]
 Maintainer: Gabriel Becker <gabembecker@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-04-14 23:50:02 UTC
+Date/Publication: 2023-05-25 07:40:06 UTC

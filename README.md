@@ -1,9 +1,9 @@
 # formatters <a href='https://github.com/insightsengineering/formatters'><img src="man/figures/formatters_hexSticker.png" align="right" alt="" width="180"></a>
 
 <!-- start badges -->
-[![Check 🛠](https://github.com/insightsengineering/formatters/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/formatters/actions/workflows/check.yaml)
+[![Check 🛠](https://github.com/insightsengineering/formatters/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/formatters/main/unit-test-report/)
 [![Docs 📚](https://github.com/insightsengineering/formatters/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/formatters/)
-[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/formatters/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/formatters/_xml_coverage_reports/data/main/coverage.xml)
+[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/formatters/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/formatters/main/coverage-report/)
 
 ![GitHub forks](https://img.shields.io/github/forks/insightsengineering/formatters?style=social)
 ![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/formatters?style=social)
@@ -24,7 +24,7 @@ related to ASCII rendering:
 
 1. `format_value` provides the ability to format single- and
    multi-valued elements into ASCII display-ready strings
-1. the `matrix_form` framework provides generics for implementing ASCII
+2. the `matrix_form` framework provides generics for implementing ASCII
    rendering support for display tables
 
 Both of these feature sets are used in the `rtables` package.
