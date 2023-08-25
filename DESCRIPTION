@@ -1,11 +1,14 @@
 Package: formatters
 Title: ASCII Formatting for Values and Tables
-Version: 0.5.0
-Date: 2023-04-19
+Version: 0.5.2
+Date: 2023-08-24
 Authors@R: c(
-    person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut", "cre")),
+    person("Gabriel", "Becker", , "gabembecker@gmail.com", role = c("aut"), comment = "original creator of the package"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("Davide", "Garolini", , "davide.garolini@roche.com", role = "ctb"),
+    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "ctb"),
+    person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb"),
+    person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("ctb", "cre")),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd"))
   )
 Description: We provide a framework for rendering complex tables to ASCII,
@@ -28,11 +31,14 @@ Collate: 'data.R' 'format_value.R' 'matrix_form.R' 'generics.R'
         'labels.R' 'mpf_exporters.R' 'page_size.R' 'pagination.R'
         'tostring.R' 'utils.R'
 NeedsCompilation: no
-Packaged: 2023-05-18 22:43:56 UTC; root
-Author: Gabriel Becker [aut, cre],
+Packaged: 2023-08-25 04:55:21 UTC; rstudio
+Author: Gabriel Becker [aut] (original creator of the package),
   Adrian Waddell [aut],
   Davide Garolini [ctb],
+  Emily de la Rua [ctb],
+  Abinaya Yogasekaram [ctb],
+  Joe Zhu [ctb, cre],
   F. Hoffmann-La Roche AG [cph, fnd]
-Maintainer: Gabriel Becker <gabembecker@gmail.com>
+Maintainer: Joe Zhu <joe.zhu@roche.com>
 Repository: CRAN
-Date/Publication: 2023-05-25 07:40:06 UTC
+Date/Publication: 2023-08-25 09:30:02 UTC

@@ -27,17 +27,21 @@ formats_3d <- c(
   "xx.xxx (xx.xxx - xx.xxx)"
 )
 
-#' List with currently support 'xx' style format labels grouped by 1d, 2d and 3d
+#' @title List with currently supported formats and vertical alignments
 #'
+#' @description We support `xx` style format labels grouped by 1d, 2d and 3d.
 #' Currently valid format labels can not be added dynamically. Format functions
-#' must be used for special cases
+#' must be used for special cases.
 #'
-#' @export
-#' @return A nested list, with elements listing the supported 1d, 2d, and 3d format strings.
+#' @return
+#' * `list_valid_format_labels()`: A nested list, with elements listing the supported 1d, 2d,
+#'  and 3d format strings.
+#'
 #' @examples
-#'
 #' list_valid_format_labels()
 #'
+#' @name list_formats
+#' @export
 list_valid_format_labels <- function() {
   structure(
     list(
@@ -48,20 +52,38 @@ list_valid_format_labels <- function() {
     info = "xx does not modify the element, and xx. rounds a number to 0 digits"
   )
 }
+#' @return
+#' * `list_valid_aligns()`: a character vector of valid vertical alignments
+#'
+#' @examples
+#' list_valid_aligns()
+#'
+#' @name list_formats
+#' @export
+list_valid_aligns <- function() {
+  c("left", "right", "center", "decimal", "dec_right", "dec_left")
+}
 
-#' Check if a format is supported
+#' @title Check if a format or alignment is supported
+#'
+#' @description Utility functions for checking formats and alignments.
 #'
 #' @param x either format string or an object returned by \code{sprintf_format}
 #' @param stop_otherwise logical, if \code{x} is not a format should an error be
 #'   thrown
-#' @note No check if the function is actually a formatter is performed.
-#' @return \code{TRUE} if \code{x} is \code{NULL}, a supported format string, or a function; \code{FALSE} otherwise.
 #'
-#' @export
+#' @note No check if the function is actually a `formatter` is performed.
+#'
+#' @return
+#'  * `is_valid_format`: \code{TRUE} if \code{x} is \code{NULL}, a supported
+#'    format string, or a function; \code{FALSE} otherwise.
 #'
 #' @examples
 #' is_valid_format("xx.x")
 #' is_valid_format("fakeyfake")
+#'
+#' @name check_formats
+#' @export
 is_valid_format <- function(x, stop_otherwise = FALSE) {
   is_valid <- is.null(x) ||
     (length(x) == 1 &&
@@ -74,9 +96,28 @@ is_valid_format <- function(x, stop_otherwise = FALSE) {
 
   is_valid
 }
+#' @param algn vector of characters that indicates the requested cell alignments.
+#'
+#' @return
+#'  * `check_aligns`: `TRUE` if it passes the check.
+#'
+#' @examples
+#' check_aligns(c("decimal", "dec_right"))
+#'
+#' @name check_formats
+#' @export
+check_aligns <- function(algn) {
+    if(anyNA(algn))
+        stop("Got missing-value for text alignment.")
+    invalid <- setdiff(algn, list_valid_aligns())
+    if(length(invalid) > 0) {
+        stop("Unsupported text-alignment(s): ",
+             paste(invalid, collapse = ", "))
+  }
+  invisible(TRUE)
+}
 
-
-#' Specify text format via a sprintf format string
+#' Specify text format via a `sprintf` format string
 #'
 #'
 #' @param format character(1). A format string passed to `sprintf`.
@@ -139,7 +180,7 @@ sprintf_format <- function(format) {
 #' after the decimal that remain after rounding. It \emph{may} differ from
 #' \code{sprintf("\%.Nf", x)} for values ending in \code{5} after the decimal place
 #' on many popular operating systems due to \code{round}'s stricter adherence to the
-#' IEC 60559 standard, particularly for R versions > 4.0.0 (see Warning in \code{\link[base:round]{round}}
+#' `IEC 60559` standard, particularly for R versions > 4.0.0 (see Warning in \code{\link[base:round]{round}}
 #' documentation).
 #'
 #' @export
@@ -206,7 +247,7 @@ sep_2d_helper <- function(x, dig1, dig2, sep, na_str, wrap = NULL) {
 #' missing values within a non-length-zero `na_str` vector.
 #'
 #' @param x ANY. The value to be formatted
-#' @param format character(1) or function. The format label (string) or formatter function to apply to \code{x}.
+#' @param format character(1) or function. The format label (string) or `formatter` function to apply to \code{x}.
 #' @param na_str character(1). String that should be displayed when the value of \code{x} is missing.
 #'   Defaults to \code{"NA"}.
 #' @param output character(1). output type
@@ -386,4 +427,31 @@ format_value <- function(x, format = NULL, output = c("ascii", "html"), na_str =
   } else {
     txt
   }
+}
+
+setClassUnion("FormatSpec", c("NULL", "character", "function", "list"))
+setClassUnion("characterOrNULL", c("NULL", "character"))
+setClass("fmt_config",
+         slots = c(format = "FormatSpec",
+                   format_na_str = "characterOrNULL",
+                   align = "characterOrNULL"))
+
+#' Format Configuration
+#'
+#' @param format character(1) or function. A format label (string) or `formatter` function.
+#' @param na_str character(1). String that should be displayed in place of missing values.
+#' @param align character(1). Alignment values should be rendered with.
+#'
+#' @return An object of class `fmt_config` which contains the following elements:
+#'   * `format`
+#'   * `na_str`
+#'   * `align`
+#'
+#' @examples
+#' fmt_config(format = "xx.xx", na_str = "-", align = "left")
+#' fmt_config(format = "xx.xx - xx.xx", align = "right")
+#'
+#' @export
+fmt_config <- function(format = NULL, na_str = "NA", align = "center") {
+  new("fmt_config", format = format, format_na_str = na_str, align = align)
 }

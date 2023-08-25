@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gabriel Becker" />
 
-<meta name="date" content="2023-05-18" />
+<meta name="date" content="2023-08-25" />
 
 <title>Introduction to the formatters package</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to the formatters package</h1>
 <h4 class="author">Gabriel Becker</h4>
-<h4 class="date">2023-05-18</h4>
+<h4 class="date">2023-08-25</h4>
 
 
 
@@ -354,8 +354,8 @@ multi-valued elements into ASCII display-ready strings</li>
 <li>the <code>matrix_form</code> framework provides generics for
 implementing ASCII rendering support for display tables</li>
 </ol>
-<p>Both of these feature sets are used in the <code>rtables</code>
-package.</p>
+<p><strong>Both of these feature sets are used in the
+<code>rtables</code> package.</strong></p>
 </div>
 <div id="formatting-values" class="section level1">
 <h1>Formatting values</h1>
@@ -369,7 +369,7 @@ numeric vector of length 1, 2 or – occasionally – 3.</p>
 formats appropriate for rendering values into ASCII strings. These
 existing formats are specified by their labels. We can see the list of
 these by calling the <code>list_valid_format_labels</code> function:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list_valid_format_labels</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list_valid_format_labels</span>()</span></code></pre></div>
 <pre><code>$`1d`
  [1] &quot;xx&quot;                 &quot;xx.&quot;                &quot;xx.x&quot;              
  [4] &quot;xx.xx&quot;              &quot;xx.xxx&quot;             &quot;xx.xxxx&quot;           
@@ -407,9 +407,9 @@ rounding to 1 decimal place, etc.</p>
 <h2>Formatting values</h2>
 <p>Values are formatted via calls to <code>format_value</code>, like
 so:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fl">5.1235</span>, <span class="at">format =</span> <span class="st">&quot;xx.xx&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fl">5.1235</span>, <span class="at">format =</span> <span class="st">&quot;xx.xx&quot;</span>)</span></code></pre></div>
 <pre><code>[1] &quot;5.12&quot;</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fu">c</span>(<span class="fl">1.2355</span>, <span class="fl">2.6789</span>), <span class="st">&quot;(xx.xx, xx.xx)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fu">c</span>(<span class="fl">1.2355</span>, <span class="fl">2.6789</span>), <span class="st">&quot;(xx.xx, xx.xx)&quot;</span>)</span></code></pre></div>
 <pre><code>[1] &quot;(1.24, 2.68)&quot;</code></pre>
 </div>
 </div>
@@ -430,63 +430,63 @@ generic <code>formatters</code> provides. This method must return a
 <code>MatrixPrintForm</code> object representing your table.</p>
 <p>We can build a baby example method for <code>data.frames</code> to
 illustrate this process:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## pagdfrow supports a large number of pieces of information regarding</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## siblings and what information should be repeated after a pagination.</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">## we ignore all that here and just give the absolutely crucial info:</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## nm (name), lab (label), rnum (absolute row position), pth (&quot;path&quot;),</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## extent (how many lines it takes up), rclass (&quot;class of row&quot;)</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>fake_pagdf_row <span class="ot">&lt;-</span> <span class="cf">function</span>(i, rnms) {</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  nm <span class="ot">&lt;-</span> rnms[i]</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pagdfrow</span>(</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">nm =</span> nm, <span class="at">lab =</span> nm, <span class="at">rnum =</span> i, <span class="at">pth =</span> nm, <span class="at">extent =</span> 1L,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">rclass =</span> <span class="st">&quot;NA&quot;</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>matrix_form.data.frame <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  fmts <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, <span class="cf">function</span>(x) <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">obj_format</span>(x))) <span class="st">&quot;xx&quot;</span> <span class="cf">else</span> <span class="fu">obj_format</span>(x))</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  bodystrs <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(x, fmt) {</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(x, format_value, <span class="at">format =</span> fmt)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  }, <span class="at">x =</span> df, <span class="at">fmt =</span> fmts)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  rnms <span class="ot">&lt;-</span> <span class="fu">row.names</span>(df)</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(rnms)) {</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    rnms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seq_len</span>(<span class="fu">NROW</span>(df)))</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  cnms <span class="ot">&lt;-</span> <span class="fu">names</span>(df)</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  strings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, cnms),</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cbind</span>(rnms, bodystrs)</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  fnr <span class="ot">&lt;-</span> <span class="fu">nrow</span>(strings)</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  fnc <span class="ot">&lt;-</span> <span class="fu">ncol</span>(strings)</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="do">## center alignment for column labels, left alignment for everything else</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  aligns <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;center&quot;</span>,</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">matrix</span>(<span class="st">&quot;left&quot;</span>, <span class="at">nrow =</span> <span class="fu">NROW</span>(df), <span class="at">ncol =</span> fnc)</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="do">## build up fake pagination df,</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  rowdf <span class="ot">&lt;-</span> <span class="fu">basic_pagdf</span>(<span class="fu">row.names</span>(df))</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix_print_form</span>(</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">strings =</span> strings,</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">aligns =</span> aligns,</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">spans =</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> fnr, <span class="at">ncol =</span> fnc),</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">formats =</span> <span class="cn">NULL</span>,</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">row_info =</span> rowdf,</span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_topleft =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">nlines_header =</span> <span class="dv">1</span>,</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">nrow_header =</span> <span class="dv">1</span></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">toString</span>(<span class="fu">matrix_form.data.frame</span>(mtcars)))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="do">## pagdfrow supports a large number of pieces of information regarding</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="do">## siblings and what information should be repeated after a pagination.</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="do">## we ignore all that here and just give the absolutely crucial info:</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="do">## nm (name), lab (label), rnum (absolute row position), pth (&quot;path&quot;),</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">## extent (how many lines it takes up), rclass (&quot;class of row&quot;)</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>fake_pagdf_row <span class="ot">&lt;-</span> <span class="cf">function</span>(i, rnms) {</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  nm <span class="ot">&lt;-</span> rnms[i]</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">pagdfrow</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="at">nm =</span> nm, <span class="at">lab =</span> nm, <span class="at">rnum =</span> i, <span class="at">pth =</span> nm, <span class="at">extent =</span> 1L,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>    <span class="at">rclass =</span> <span class="st">&quot;NA&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  )</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>}</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>matrix_form.data.frame <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  fmts <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, <span class="cf">function</span>(x) <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">obj_format</span>(x))) <span class="st">&quot;xx&quot;</span> <span class="cf">else</span> <span class="fu">obj_format</span>(x))</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  bodystrs <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(x, fmt) {</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>    <span class="fu">sapply</span>(x, format_value, <span class="at">format =</span> fmt)</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  }, <span class="at">x =</span> df, <span class="at">fmt =</span> fmts)</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  rnms <span class="ot">&lt;-</span> <span class="fu">row.names</span>(df)</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(rnms)) {</span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>    rnms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seq_len</span>(<span class="fu">NROW</span>(df)))</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>  }</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>  cnms <span class="ot">&lt;-</span> <span class="fu">names</span>(df)</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>  strings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, cnms),</span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>    <span class="fu">cbind</span>(rnms, bodystrs)</span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>  )</span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>  fnr <span class="ot">&lt;-</span> <span class="fu">nrow</span>(strings)</span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>  fnc <span class="ot">&lt;-</span> <span class="fu">ncol</span>(strings)</span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a>  <span class="do">## center alignment for column labels, left alignment for everything else</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a>  aligns <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a>    <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a>    <span class="fu">matrix</span>(<span class="st">&quot;left&quot;</span>, <span class="at">nrow =</span> <span class="fu">NROW</span>(df), <span class="at">ncol =</span> fnc)</span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a>  )</span>
+<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>  <span class="do">## build up fake pagination df,</span></span>
+<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>  rowdf <span class="ot">&lt;-</span> <span class="fu">basic_pagdf</span>(<span class="fu">row.names</span>(df))</span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>  <span class="fu">matrix_print_form</span>(</span>
+<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>    <span class="at">strings =</span> strings,</span>
+<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>    <span class="at">aligns =</span> aligns,</span>
+<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a>    <span class="at">spans =</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> fnr, <span class="at">ncol =</span> fnc),</span>
+<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a>    <span class="at">formats =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a>    <span class="at">row_info =</span> rowdf,</span>
+<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a>    <span class="at">has_topleft =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-52"><a href="#cb7-52" tabindex="-1"></a>    <span class="at">nlines_header =</span> <span class="dv">1</span>,</span>
+<span id="cb7-53"><a href="#cb7-53" tabindex="-1"></a>    <span class="at">nrow_header =</span> <span class="dv">1</span></span>
+<span id="cb7-54"><a href="#cb7-54" tabindex="-1"></a>  )</span>
+<span id="cb7-55"><a href="#cb7-55" tabindex="-1"></a>}</span>
+<span id="cb7-56"><a href="#cb7-56" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">toString</span>(<span class="fu">matrix_form.data.frame</span>(mtcars)))</span></code></pre></div>
 <pre><code>                      mpg    cyl   disp    hp    drat    wt     qsec    vs   am   gear   carb
 —————————————————————————————————————————————————————————————————————————————————————————————
 Mazda RX4             21     6     160     110   3.9    2.62    16.46   0    1    4      4   

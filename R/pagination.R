@@ -89,7 +89,7 @@ NULL
 #' Create row of pagination data frame
 #' @param nm character(1). Name
 #' @param lab character(1). Label
-#' @param rnum numeric(1). Absolute rownumber
+#' @param rnum numeric(1). Absolute row number
 #' @param pth character or NULL. Path within larger table
 #' @param sibpos integer(1). Position among sibling rows
 #' @param nsibs integer(1). Number of siblings (including self).
@@ -295,7 +295,7 @@ valid_pag <- function(pagdf,
       ok_split <- vapply(inplay,
                    function(var) {
           !identical(curpth[match(var, curpth) + 1],
-                     nxtpth[match(var, nxtpth) +1])
+                     nxtpth[match(var, nxtpth) + 1])
       },
       TRUE)
 
@@ -637,7 +637,7 @@ calc_rlpp <- function(pg_size_spec, mf, colwidths, tf_wrap, verbose) {
         flines <- nlines(mnfoot, colwidths = colwidths,
                          max_width = max_width - table_inset(mf))
     prfoot <- prov_footer(mf)
-    if(length(prfoot) && nzchar(prfoot)) {
+    if(length(prfoot) && any(nzchar(prfoot))) {
         flines <- flines + nlines(prov_footer(mf), colwidths = colwidths, max_width = max_width)
         if(havemn)
             flines <- flines + 1L ## space between main and prov footer.
@@ -688,12 +688,12 @@ splice_idx_lists <- function(lsts) {
 #' These functions perform or diagnose bi-directional pagination on
 #' an object.
 #'
-#' `paginate_to_mpfs` renders `obj` into the `MatrixPrintForm` (MPF)
-#' intermediate representation, and then paginates that MPF into
-#' component MPFs each corresponding to an individual page and
+#' `paginate_to_mpfs` renders `obj` into the `MatrixPrintForm` (`MPF`)
+#' intermediate representation, and then paginates that `MPF` into
+#' component `MPF`s each corresponding to an individual page and
 #' returns those in a list.
 #'
-#' `paginate_indices` renders `obj` into an MPF, then uses
+#' `paginate_indices` renders `obj` into an `MPF`, then uses
 #' that representation to calculate the rows and columns of
 #' `obj` corresponding to each page of the pagination of `obj`,
 #' but simply returns these indices rather than paginating
@@ -889,6 +889,10 @@ paginate_indices <- function(obj,
          pag_col_indices = pag_col_indices)
 }
 
+setGeneric("has_page_title", function(obj) standardGeneric("has_page_title"))
+
+setMethod("has_page_title", "ANY", function(obj) length(page_titles(obj)) > 0)
+
 #' @rdname paginate_indices
 #' @export
 paginate_to_mpfs <- function(obj,
@@ -958,6 +962,8 @@ paginate_to_mpfs <- function(obj,
                       nosplitin = nosplitin,
                       verbose = verbose)
         return(unlist(deep_pag, recursive = FALSE))
+    } else if (has_page_title(fpags[[1]])) {
+      obj <- fpags[[1]]
     }
 
 
