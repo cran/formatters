@@ -6,10 +6,15 @@
 
 #' @import methods
 #' @include matrix_form.R
-
-#' @title Make row and column layout summary data.frames for use during pagination
-#' @name make_row_df
 #'
+#' @title Make row layout summary data.frames for use during pagination
+#'
+#' @description
+#' All relevant information about table rows (e.g. indentations) is summarized in a data.frames.
+#' This function works ONLY on `rtables` and `rlistings` objects, and not on their print counterparts
+#' (like `MatrixPrintForm`).
+#'
+#' @name make_row_df
 #'
 #' @param tt ANY. Object representing the table-like object to be summarized.
 #' @param visible_only logical(1). Should only visible aspects of the table structure be reflected in this summary.
@@ -46,12 +51,12 @@
 #' and should not be set during a top-level call
 #'
 #' @note the technically present root tree node is excluded from the summary returned by
-#' both \code{make_row_df} and \code{make_col_df}, as it is simply the
+#' both \code{make_row_df} and \code{make_col_df} (see `rtables::make_col_df`), as it is simply the
 #' row/column structure of \code{tt} and thus not useful for pathing or pagination.
-#' @export
 #' @return a data.frame of row/column-structure information used by the pagination machinery.
-#' @rdname make_row_df
 #'
+#' @rdname make_row_df
+#' @export
 ## nocov start
 setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                    rownum = 0,
@@ -65,13 +70,30 @@ setGeneric("make_row_df", function(tt, colwidths = NULL, visible_only = TRUE,
                                    max_width = NULL) {
   standardGeneric("make_row_df")
 })
+
+#' @rdname make_row_df
+setMethod("make_row_df", "MatrixPrintForm", function(tt, colwidths = NULL, visible_only = TRUE,
+                                                     rownum = 0,
+                                                     indent = 0L,
+                                                     path = character(),
+                                                     incontent = FALSE,
+                                                     repr_ext = 0L,
+                                                     repr_inds = integer(),
+                                                     sibpos = NA_integer_,
+                                                     nsibs = NA_integer_,
+                                                     max_width = NULL) {
+  stop(
+    "make_row_df can be used only on {rtables} table objects, and not on `matrix_form`-",
+    "generated objects (MatrixPrintForm)."
+  )
+})
 ## nocov end
 
 
 #' Transform `rtable` to a list of matrices which can be used for outputting
 #'
-#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML it is useful to
-#' map the `rtable` to an in between state with the formatted cells in a matrix form.
+#' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML it is
+#' useful to map the `rtable` to an in between state with the formatted cells in a matrix form.
 #'
 #' @param obj ANY. Object to be transformed into a ready-to-render form (a `MatrixPrintForm` object)
 #' @param indent_rownames logical(1), if TRUE the column with the row names in the `strings` matrix of has indented row
@@ -108,6 +130,7 @@ setGeneric("matrix_form", function(obj,
                                    indent_size = 2) {
   standardGeneric("matrix_form")
 })
+
 
 #' @rdname matrix_form
 #' @export
@@ -168,10 +191,7 @@ setMethod(
     if (length(x) == 0) {
       0L
     } else {
-      sum(unlist(vapply(x, nlines, NA_integer_,
-        colwidths = colwidths,
-        max_width = max_width
-      )))
+      sum(unlist(vapply(x, nlines, NA_integer_, colwidths = colwidths, max_width = max_width)))
     }
   }
 )
@@ -619,3 +639,40 @@ setGeneric("num_rep_cols", function(obj) standardGeneric("num_rep_cols"))
 #' @export
 #' @rdname num_rep_cols
 setMethod("num_rep_cols", "ANY", function(obj) 0L)
+
+# header_section_div -----------------------------------------------------------
+#' @keywords internal
+setGeneric("header_section_div", function(obj) standardGeneric("header_section_div"))
+#' @keywords internal
+setMethod(
+  "header_section_div", "MatrixPrintForm",
+  function(obj) obj$header_section_div
+)
+#' @keywords internal
+setGeneric("header_section_div<-", function(obj, value) standardGeneric("header_section_div<-"))
+#' @keywords internal
+setMethod(
+  "header_section_div<-", "MatrixPrintForm",
+  function(obj, value) {
+    obj$header_section_div <- value
+    obj
+  }
+)
+# horizontal_sep ---------------------------------------------------------------
+#' @keywords internal
+setGeneric("horizontal_sep", function(obj) standardGeneric("horizontal_sep"))
+#' @keywords internal
+setMethod(
+  "horizontal_sep", "MatrixPrintForm",
+  function(obj) obj$horizontal_sep
+)
+#' @keywords internal
+setGeneric("horizontal_sep<-", function(obj, value) standardGeneric("horizontal_sep<-"))
+#' @keywords internal
+setMethod(
+  "horizontal_sep<-", "MatrixPrintForm",
+  function(obj, value) {
+    obj$horizontal_sep <- value
+    obj
+  }
+)

@@ -12,7 +12,6 @@ format_value(5.1235, format = "xx.xx")
 format_value(c(1.2355, 2.6789), "(xx.xx, xx.xx)")
 
 ## -----------------------------------------------------------------------------
-
 ## pagdfrow supports a large number of pieces of information regarding
 ## siblings and what information should be repeated after a pagination.
 ## we ignore all that here and just give the absolutely crucial info:
@@ -61,7 +60,7 @@ matrix_form.data.frame <- function(df) {
     strings = strings,
     aligns = aligns,
     spans = matrix(1, nrow = fnr, ncol = fnc),
-    formats = NULL,
+    formats = matrix("", nrow = fnr, ncol = fnc),
     row_info = rowdf,
     has_topleft = FALSE,
     nlines_header = 1,

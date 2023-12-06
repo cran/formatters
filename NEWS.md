@@ -1,3 +1,25 @@
+## formatters 0.5.5
+ * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+ * Added the possibility of setting a general default using `set_default_hsep()` that sets up the option `getOption("formatters_default_hsep")`.
+ * Allowed section divider between header and table body.
+ * Added support for combining duplicate referential footnotes.
+ * Migrated `export_as_pdf` from `rtables`. Now using `paginate_to_mpfs` function. Made `font_lcpi` function internal.
+ * Fixed wrapping and section dividers error.
+ * Fixed infinite loop in `wrap_string` that was caused by a bug in `stringi::stri_wrap` not wrapping small
+   strings with dots and spaces correctly.
+
+## formatters 0.5.4
+ * Fixed a bug in `paginate_to_mpfs()` so that formatting in listings key columns is retained with pagination [`insightsengineering/rlistings#155`](https://github.com/insightsengineering/rlistings/issues/155).
+ * Improved error message for pagination when `cpp` or `lpp` is too small in comparison to the column or row widths.
+ * Added full support of newline characters in any part of `rtables` objects.
+ * Modified default vertical alignment for top left information to bottom.
+ * Rework of `wrap_string` so to allow space characters to be used and wrapped.
+
+## formatters 0.5.3
+ * Decimal alignment now throws informative error if scientific notation is used.
+ * Specified minimal version of package dependencies.
+ * Updated hex sticker logo.
+
 ## formatters 0.5.2
  * `paginate_to_mpfs` can handle single column tables and listings.
  * Added decimal alignment support with `decimal`, `dec_right`, and `dec_left`.
