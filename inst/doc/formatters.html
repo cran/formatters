@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gabriel Becker" />
 
-<meta name="date" content="2023-12-05" />
+<meta name="date" content="2024-04-10" />
 
 <title>Introduction to the formatters package</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to the formatters package</h1>
 <h4 class="author">Gabriel Becker</h4>
-<h4 class="date">2023-12-05</h4>
+<h4 class="date">2024-04-10</h4>
 
 
 
@@ -375,7 +375,8 @@ these by calling the <code>list_valid_format_labels</code> function:</p>
  [4] &quot;xx.xx&quot;              &quot;xx.xxx&quot;             &quot;xx.xxxx&quot;           
  [7] &quot;xx%&quot;                &quot;xx.%&quot;               &quot;xx.x%&quot;             
 [10] &quot;xx.xx%&quot;             &quot;xx.xxx%&quot;            &quot;(N=xx)&quot;            
-[13] &quot;&gt;999.9&quot;             &quot;&gt;999.99&quot;            &quot;x.xxxx | (&lt;0.0001)&quot;
+[13] &quot;N=xx&quot;               &quot;&gt;999.9&quot;             &quot;&gt;999.99&quot;           
+[16] &quot;x.xxxx | (&lt;0.0001)&quot;
 
 $`2d`
  [1] &quot;xx / xx&quot;            &quot;xx. / xx.&quot;          &quot;xx.x / xx.x&quot;       
@@ -474,7 +475,7 @@ illustrate this process:</p>
 <span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a></span>
 <span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>  <span class="do">## build up fake pagination df,</span></span>
 <span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>  rowdf <span class="ot">&lt;-</span> <span class="fu">basic_pagdf</span>(<span class="fu">row.names</span>(df))</span>
-<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>  <span class="fu">matrix_print_form</span>(</span>
+<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>  <span class="fu">MatrixPrintForm</span>(</span>
 <span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>    <span class="at">strings =</span> strings,</span>
 <span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>    <span class="at">aligns =</span> aligns,</span>
 <span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a>    <span class="at">spans =</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> fnr, <span class="at">ncol =</span> fnc),</span>

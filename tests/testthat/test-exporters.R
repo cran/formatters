@@ -24,11 +24,9 @@ test_that("exporters work", {
   ## covered below
   ## fil <- tempfile(fileext = ".rtf")
 
-
   ## myrtf <- mpf_to_rtf(dfmf)
   ## r2rtf::write_rtf(myrtf, fil)
   ## expect_true(file.exists(fil))
-
 
   fil2 <- tempfile(fileext = ".txt")
 
@@ -47,8 +45,6 @@ test_that("exporters work", {
 
   ## 4 on first page, incl the message, 2 on second page incl message
   expect_identical(length(grep("{*}", exptlines, fixed = TRUE)), 6L)
-
-
 
   exp_h_pags <- 3L
   exp_v_pags <- 2L
@@ -71,70 +67,68 @@ test_that("exporters work", {
 
   expect_true(msg_1_pos < min(msg_asterisk_pos))
 
-
   expect_identical(
     length(grep("~", exptlines, fixed = TRUE)),
     exp_h_pags * exp_v_pags - 1L
   )
-
 
   ## export_as_rtf rudimentary coverage
   if (requireNamespace("r2rtf")) {
     fil4 <- tempfile(fileext = ".rtf")
     export_as_rtf(dfmf, file = fil4)
     expect_true(file.exists(fil4))
+    if (file.exists("Rplots.pdf")) {
+      file.remove("Rplots.pdf") # coming probably from rtf::
+    }
   }
+})
 
-
-
+test_that("mpf_subset_rows works when there are newlines/wrapping in column labels", {
   ## https://github.com/insightsengineering/rtables/issues/634
+  strs <- matrix(c(
+    "hi", "lo",
+    "", "there",
+    "(N=50)", "(N=whoknows)",
+    "value", "value",
+    "value2", "value2"
+  ), nrow = 5, byrow = TRUE)
 
-  test_that("mpf_subset_rows works when there are newlines/wrapping in column labels", {
-    strs <- matrix(c(
-      "hi", "lo",
-      "", "there",
-      "(N=50)", "(N=whoknows)",
-      "value", "value",
-      "value2", "value2"
-    ), nrow = 5, byrow = TRUE)
+  rinfo <- rbind(
+    pagdfrow(
+      nm = "what", lab = "what", rnum = 1, pth = list(), extent = 1L, nsibs = 1, sibpos = 1, rclass = "what"
+    ),
+    pagdfrow(
+      nm = "what2", lab = "what2", rnum = 2, pth = list(), extent = 1L, nsibs = 1, sibpos = 1, rclass = "what"
+    )
+  )
+  mymf <- MatrixPrintForm(
+    strings = strs, aligns = matrix("center", ncol = 2, nrow = 5),
+    formats = matrix("xx", ncol = 2, nrow = 5),
+    spans = matrix(1L, ncol = 2, nrow = 5),
+    has_topleft = FALSE,
+    line_grouping = c(1, 1, 2, 3, 4),
+    nrow_header = 2,
+    row_info = rinfo
+  )
 
-    rinfo <- rbind(
-      pagdfrow(
-        nm = "what", lab = "what", rnum = 1, pth = list(), extent = 1L, nsibs = 1, sibpos = 1, rclass = "what"
-      ),
-      pagdfrow(
-        nm = "what2", lab = "what2", rnum = 2, pth = list(), extent = 1L, nsibs = 1, sibpos = 1, rclass = "what"
-      )
-    )
-    mymf <- MatrixPrintForm(
-      strings = strs, aligns = matrix("center", ncol = 2, nrow = 5),
-      formats = matrix("xx", ncol = 2, nrow = 5),
-      spans = matrix(1L, ncol = 2, nrow = 5),
-      has_topleft = FALSE,
-      line_grouping = c(1, 1, 2, 3, 4),
-      nrow_header = 2,
-      row_info = rinfo
-    )
-
-    mymf_out <- toString(mymf, hsep = "-")
-    expct_lns <- c(
-      "              lo     ",
-      "  hi        there    ",
-      "(N=50)   (N=whoknows)",
-      "---------------------",
-      "value       value    ",
-      "value2      value2   \n"
-    )
-    expect_identical(
-      mymf_out,
-      paste(expct_lns, collapse = "\n")
-    )
-    newmf <- mpf_subset_rows(mymf, 1)
-    expect_identical(
-      toString(newmf, hsep = "-"),
-      paste(c(expct_lns[1:5], ""), collapse = "\n")
-    )
-  })
+  mymf_out <- toString(mymf, hsep = "-")
+  expct_lns <- c(
+    "              lo     ",
+    "  hi        there    ",
+    "(N=50)   (N=whoknows)",
+    "---------------------",
+    "value       value    ",
+    "value2      value2   \n"
+  )
+  expect_identical(
+    mymf_out,
+    paste(expct_lns, collapse = "\n")
+  )
+  newmf <- mpf_subset_rows(mymf, 1)
+  expect_identical(
+    toString(newmf, hsep = "-"),
+    paste(c(expct_lns[1:5], ""), collapse = "\n")
+  )
 })
 
 test_that("export_as_txt maintains repeated columns when paginate is TRUE", {
@@ -155,4 +149,68 @@ test_that("export_as_txt maintains horizontal separator from table", {
   # repeat first 3 columns in each page
   out <- strsplit(export_as_txt(dfmf), "\n")[[1]][2]
   expect_equal(out, paste0(rep("=", nchar(out)), collapse = ""))
+})
+
+test_that("export_as_pdf works", {
+  # Enhancing coverage -> modified copy from rtables
+  bmf <- basic_matrix_form(mtcars)
+  tmpf <- tempfile(fileext = ".pdf")
+
+  expect_warning(
+    export_as_pdf(bmf, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
+    "width of page 1 exceeds the available space"
+  )
+  expect_true(file.exists(tmpf))
+  expect_warning(
+    export_as_pdf(bmf, file = tmpf, height = 3, paginate = FALSE),
+    "height of page 1 exceeds the available space"
+  )
+
+  set_default_page_number("page {i} of {n}")
+  expect_silent(res <- export_as_pdf(bmf, file = tmpf, paginate = TRUE, cpp = 90))
+  set_default_page_number(NULL)
+
+  expect_equal(res$npages, 2)
+  file.remove(tmpf)
+})
+
+test_that("exporting lists of tables and listings works", {
+  bmf <- basic_matrix_form(mtcars)
+  blmf <- basic_listing_mf(mtcars, keycols = c("vs", "gear"))
+  l_mf <- list(bmf, blmf)
+
+  output <- export_as_txt(l_mf, page_num = "page {i} of {n}", cpp = 70)
+  last_line_last_page <- strsplit(output, "\n")[[1]][168]
+
+  expect_true(grepl(last_line_last_page, pattern = "page 4 of 4"))
+  expect_equal(nchar(last_line_last_page), 70)
+
+  expect_warning(
+    export_as_txt(l_mf, paginate = FALSE),
+    "paginate is FALSE, but x is a list of tables or listings, so paginate will automatically be updated to TRUE"
+  )
+
+  # export_as_pdf
+  tmpf <- tempfile(fileext = ".pdf")
+  output <- export_as_pdf(bmf, file = tmpf, page_num = "page {i} of {n}", cpp = 70)
+  expect_true(file.exists(tmpf))
+
+  expect_warning(
+    export_as_pdf(l_mf, file = tmpf, paginate = FALSE),
+    "paginate is FALSE, but x is a list of tables or listings, so paginate will automatically be updated to TRUE"
+  )
+  expect_true(file.exists(tmpf))
+  file.remove(tmpf)
+
+  # export_as_rtf
+  tmpf <- tempfile(fileext = ".rtf")
+  output <- export_as_rtf(bmf, file = tmpf, page_num = "page {i} of {n}", cpp = 70)
+  expect_true(file.exists(tmpf))
+
+  expect_warning(
+    export_as_pdf(l_mf, file = tmpf, paginate = FALSE),
+    "paginate is FALSE, but x is a list of tables or listings, so paginate will automatically be updated to TRUE"
+  )
+  expect_true(file.exists(tmpf))
+  file.remove(tmpf)
 })

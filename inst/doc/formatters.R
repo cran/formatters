@@ -1,4 +1,4 @@
-## ---- echo=FALSE--------------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 knitr::opts_chunk$set(comment = "")
 library(formatters)
 
@@ -56,7 +56,7 @@ matrix_form.data.frame <- function(df) {
 
   ## build up fake pagination df,
   rowdf <- basic_pagdf(row.names(df))
-  matrix_print_form(
+  MatrixPrintForm(
     strings = strings,
     aligns = aligns,
     spans = matrix(1, nrow = fnr, ncol = fnc),

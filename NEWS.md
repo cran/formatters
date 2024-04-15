@@ -1,3 +1,18 @@
+## formatters 0.5.6
+ * Added "N=xx" format and unit test for it.
+ * Added error catch for `\r` recursive special character.
+ * Fixed pagination unexpected counts for `rlistings`' pagination by removing the manual subsetting workaround and fixing [`insightsengineering/rlistings#155`](https://github.com/insightsengineering/rlistings/issues/155).
+ * Fixed mismatch between pagination and exports regarding the value assigned to parameter `max_width`. Introduced general handler `.handle_max_width` for pagination, exports, and `toString`.
+ * Fixed bug in `format_value` causing a warning for vectors containing both NA and non-NA values.
+ * Fixed issue with `var_label` assignment that needed to be of non-named strings.
+ * Included indentation and split rows with their `LabelRow` assignment in `basic_matrix_form`.
+ * Allowed tables with content rows in the end be exported.
+ * Moved new line expansion for decorations from `rtables`' `matrix_form` to `formatters`' constructor `MatrixPrintForm` so to cover also `rlistings`.
+ * Improved relevant information feedback during pagination.
+ * Updated `export_as_txt` to allow lists of tables/listings as input. This enables listing pagination with pages by parameter.
+ * Removed the possibility of setting `min_siblings > 0` when dealing with listings. This allows smooth pagination when there are only 2 lines.
+ * Removed redundant references to `matrix_print_form` constructor (now only `MatrixPrintForm`).
+
 ## formatters 0.5.5
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
  * Added the possibility of setting a general default using `set_default_hsep()` that sets up the option `getOption("formatters_default_hsep")`.
@@ -50,8 +65,8 @@
  * `MatrixPrintForm` objects infer detailed referential footnote information from their `strings` element for backward compatibility.
  * Fix to test that failed on old Windows CRAN machine due to imperfect UTF support there.
  * If `lpp` and `cpp` in pagination or exporter functions are assigned to `NULL`, no pagination in the vertical or horizontal direction happens, respectively. 
-* The new default of `NA_integer_` for `lpp` and `cpp` now means those values should be inferred from page size.
-* Added `hexSticker` logo.
+ * The new default of `NA_integer_` for `lpp` and `cpp` now means those values should be inferred from page size.
+ * Added `hexSticker` logo.
 
 ## formatters 0.4.0
  * Cell values and row labels are now word-wrapped based on column widths (`widths` in `toString` and `colwidths` in pagination and exporters.
