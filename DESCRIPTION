@@ -1,7 +1,7 @@
 Package: formatters
 Title: ASCII Formatting for Values and Tables
-Version: 0.5.6
-Date: 2024-04-10
+Version: 0.5.8
+Date: 2024-06-14
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "original creator of the package"),
@@ -20,16 +20,17 @@ URL: https://insightsengineering.github.io/formatters/,
         https://github.com/insightsengineering/formatters/
 BugReports: https://github.com/insightsengineering/formatters/issues
 Depends: methods, R (>= 2.10)
-Imports: checkmate (>= 2.1.0), grid, htmltools (>= 0.5.3)
-Suggests: dplyr (>= 1.0.9), gt (>= 0.7.0), huxtable (>= 2.0.0), knitr
-        (>= 1.42), lifecycle (>= 0.2.0), r2rtf (>= 0.3.2), rmarkdown
-        (>= 2.19), stringi (>= 1.6), testthat (>= 3.0.4), withr (>=
-        2.0.0)
+Imports: checkmate (>= 2.1.0), grid, htmltools (>= 0.5.3), lifecycle
+        (>= 0.2.0)
+Suggests: dplyr (>= 1.0.9), gt (>= 0.10.0), huxtable (>= 2.0.0), knitr
+        (>= 1.42), r2rtf (>= 0.3.2), rmarkdown (>= 2.23), stringi (>=
+        1.6), testthat (>= 3.0.4), withr (>= 2.0.0)
 VignetteBuilder: knitr
 Config/Needs/verdepcheck: mllg/checkmate, rstudio/htmltools,
-        tidyverse/dplyr, rstudio/gt, hughjonesd/huxtable, yihui/knitr,
-        r-lib/lifecycle, Merck/r2rtf, rstudio/rmarkdown,
-        gagolews/stringi, r-lib/testthat, r-lib/withr
+        r-lib/lifecycle, tidyverse/dplyr, rstudio/gt,
+        hughjonesd/huxtable, yihui/knitr, Merck/r2rtf,
+        rstudio/rmarkdown, gagolews/stringi, r-lib/testthat,
+        r-lib/withr
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
@@ -39,7 +40,7 @@ Collate: 'data.R' 'format_value.R' 'matrix_form.R' 'generics.R'
         'labels.R' 'mpf_exporters.R' 'package.R' 'page_size.R'
         'pagination.R' 'tostring.R' 'utils.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2024-04-10 16:08:42 UTC; rstudio
+Packaged: 2024-06-17 08:42:15 UTC; rstudio
 Author: Gabriel Becker [aut] (original creator of the package),
   Adrian Waddell [aut],
   Davide Garolini [ctb],
@@ -49,4 +50,4 @@ Author: Gabriel Becker [aut] (original creator of the package),
   F. Hoffmann-La Roche AG [cph, fnd]
 Maintainer: Joe Zhu <joe.zhu@roche.com>
 Repository: CRAN
-Date/Publication: 2024-04-15 07:20:07 UTC
+Date/Publication: 2024-06-19 15:20:02 UTC
