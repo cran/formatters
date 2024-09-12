@@ -312,11 +312,16 @@ test_that("formats work", {
   expect_identical(format_value(c(500), "(N=xx)"), "(N=500)")
 
   ## errors
+  expect_error(format_value(5.1, "abcd"), "Unknown format label")
+  expect_error(
+    format_value(5.1, "xx - xx"),
+    "<5.1> and format 'xx - xx' are of different lengths \\(1 vs 2\\)"
+  )
+  expect_error(
+    format_value(c(5.1, 2, 3), "xx - xx"),
+    "<5.1, 2, 3> and format 'xx - xx' are of different lengths \\(3 vs 2\\)"
+  )
 
-  expect_error(format_value(5.1, "abcd"), "unknown format label")
-  expect_error(format_value(5.1, "xx - xx"), "are of different length")
-
-  expect_error(format_value(c(5.1, 2, 3), "xx - xx"), "are of different length")
   ## handling NAs
 
   results <- vapply(forms[["1d"]], function(fmt) format_value(NA, format = fmt), "")
@@ -324,16 +329,16 @@ test_that("formats work", {
 
   expect_true(all(justnastr))
 
-  expect_identical(
+  expect_equal(
     format_value(NA, "xx.", na_str = "-"),
     "-"
   )
-  expect_identical(
+  expect_equal(
     format_value(NA, "xx", na_str = "-"),
     "-"
   )
 
-  expect_identical(
+  expect_equal(
     format_value(c(1, NA), "xx"),
     c("1", "NA")
   )
@@ -919,4 +924,25 @@ test_that("fmt_config works as expected", {
   expect_silent(obj_format(x) <- function() {})
   expect_silent(obj_na_str(x) <- "something wrong")
   expect_silent(obj_align(x) <- "something wrong")
+})
+
+# regression tests -------------------------------------------------------------
+test_that("na_str works when having multiple NAs and multiple values to be changed", {
+  # Regression test from #308
+  expect_identical(
+    format_value(c(1, 1, NA), format = "xx.x (xx.x - xx.x)", na_str = "NE"),
+    "1.0 (1.0 - NE)"
+  )
+  expect_identical(
+    format_value(c(1, NA, NA), format = "xx.x (xx.x - xx.x)", na_str = "NE"),
+    "1.0 (NE - NE)"
+  )
+  expect_identical(
+    format_value(c(NA, 1, NA), format = "xx.x (xx.x - xx.x)", na_str = c("NE", "<missing>")),
+    "NE (1.0 - <missing>)"
+  )
+  expect_identical(
+    format_value(c(NA, 1, NA), format = "xx.x (xx.x - xx.x)", na_str = letters[seq(5)]),
+    "a (1.0 - b)"
+  )
 })

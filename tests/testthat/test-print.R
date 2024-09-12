@@ -1,4 +1,8 @@
 test_that("toString works with and without indentation", {
+  require("dplyr", quietly = TRUE)
+
+  skip_if_not_installed("dplyr")
+
   set.seed(1)
   iris_output <- iris %>%
     mutate(my_cols = sample(c("A", "B", "C"), nrow(iris), replace = TRUE)) %>%
