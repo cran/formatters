@@ -17,18 +17,29 @@ mform_handle_newlines <- function(matform) {
   spamat <- mf_spans(matform)
   alimat <- mf_aligns(matform)
   nr_header <- mf_nrheader(matform)
-  nl_inds_header <- seq(1, mf_nlheader(matform))
-  hdr_inds <- 1:nr_header
+  nl_inds_header <- seq(mf_nlheader(matform))
+  hdr_inds <- seq(nr_header)
 
   # hack that is necessary only if top-left is bottom aligned (default)
   topleft_has_nl_char <- FALSE
+
+  # Exract top-left information
+  tl <- strmat[nl_inds_header, 1, drop = TRUE]
+  has_topleft <- has_topleft && any(nzchar(tl)) # update topleft info if there is any
+
   if (has_topleft) {
-    tl <- strmat[nl_inds_header, 1, drop = TRUE]
+    # removes it from the header (temporary) - done so the header can be top aligned
     strmat[nl_inds_header, 1] <- ""
-    tl <- tl[nzchar(tl)] # we are not interested in initial "" but we cover initial \n
+
+    # remove top empty strings (because they are not topleft) and assign topleft to add back
+    if (any(!nzchar(tl)) && length(tl) > 1) { # needed if ever has_top_left is true but only empties
+      # values that are "" before topleft information
+      which_is_fist_nzchar <- which(nzchar(tl))[1]
+      tl <- tl[-(seq(which_is_fist_nzchar) - 1)] # -1 because we take out "" from beginning
+    }
     topleft_has_nl_char <- any(grepl("\n", tl))
     tl_to_add_back <- strsplit(paste0(tl, collapse = "\n"), split = "\n", fixed = TRUE)[[1]]
-    how_many_nl <- length(tl_to_add_back)
+    tl_how_many_nl <- length(tl_to_add_back)
   }
 
   # pre-proc in case of wrapping and \n
@@ -44,7 +55,7 @@ mform_handle_newlines <- function(matform) {
   # because we don't care about wrapping here we're counting lines
   # TODO probably better if we had a nlines_nowrap fun to be more explicit
 
-  row_nlines <- apply(
+  row_nlines <- apply( # tells how many nlines for each row
     strmat,
     1,
     function(x) {
@@ -60,10 +71,9 @@ mform_handle_newlines <- function(matform) {
     }
   )
 
-
   # Correction for the case where there are more lines for topleft material than for cols
-  if (has_topleft && (sum(row_nlines[nl_inds_header]) < how_many_nl)) {
-    row_nlines[1] <- row_nlines[1] + how_many_nl - sum(row_nlines[nl_inds_header])
+  if (has_topleft && (sum(row_nlines[hdr_inds]) < tl_how_many_nl)) {
+    row_nlines[1] <- row_nlines[1] + tl_how_many_nl - sum(row_nlines[hdr_inds])
   }
 
   # There is something to change
@@ -95,8 +105,8 @@ mform_handle_newlines <- function(matform) {
     )
 
     if (has_topleft) {
-      starts_from_ind <- if (sum(row_nlines[hdr_inds]) - how_many_nl > 0) {
-        sum(row_nlines[hdr_inds]) - how_many_nl
+      starts_from_ind <- if (sum(row_nlines[hdr_inds]) - tl_how_many_nl > 0) {
+        sum(row_nlines[hdr_inds]) - tl_how_many_nl
       } else {
         0
       }
@@ -127,7 +137,6 @@ mform_handle_newlines <- function(matform) {
   prov_footer(matform) <- .quick_handle_nl(prov_footer(matform))
 
   # xxx \n in page titles are not working atm (I think)
-
   matform
 }
 
@@ -376,7 +385,18 @@ mf_update_cinfo <- function(mf, colwidths = NULL, rep_cols = NULL) {
     cinfo$self_extent <- r_colwidths
     nrepcols <- num_rep_cols(mf)
     rep_seq <- seq_len(nrepcols)
-    cinfo$par_extent <- cumsum(c(0, cinfo$self_extent[seq_len(nrepcols)], rep(0, length(r_colwidths) - nrepcols - 1)))
+    is_listing <- !is.null(mf$listing_keycols)
+
+    # empty listing
+    if (is_listing && length(mf$listing_keycols) == 1 && length(r_colwidths) - nrepcols < 1) {
+      cinfo$par_extent <- 0
+      # listing with all key columns
+    } else if (is_listing && mf_ncol(mf) == length(mf$listing_keycols)) {
+      cinfo$par_extent <- cumsum(c(0, cinfo$self_extent[seq_len(nrepcols - 1)]))
+    } else {
+      cinfo$par_extent <- cumsum(c(0, cinfo$self_extent[seq_len(nrepcols)], rep(0, length(r_colwidths) - nrepcols - 1)))
+    }
+
     cinfo$reprint_inds <- I(lapply(seq_len(NROW(cinfo)), function(i) rep_seq[rep_seq < i]))
     mf_cinfo(mf) <- cinfo
   }
