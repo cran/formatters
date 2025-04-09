@@ -1,14 +1,17 @@
 Package: formatters
 Title: ASCII Formatting for Values and Tables
-Version: 0.5.10
-Date: 2025-01-08
+Version: 0.5.11
+Date: 2025-04-08
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "original creator of the package"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
-    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "aut"),
-    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "aut"),
-    person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb"),
+    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "aut",
+           comment = c(ORCID = "0000-0002-1445-1369")),
+    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "aut",
+           comment = c(ORCID = "0009-0000-8738-5561")),
+    person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb",
+           comment = c(ORCID = "0009-0005-2083-1105")),
     person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7566-2787")),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd"))
@@ -41,14 +44,14 @@ Collate: 'data.R' 'format_value.R' 'matrix_form.R' 'generics.R'
         'labels.R' 'mpf_exporters.R' 'package.R' 'page_size.R'
         'pagination.R' 'tostring.R' 'utils.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2025-01-08 08:54:44 UTC; rstudio
+Packaged: 2025-04-08 20:38:39 UTC; melkiades
 Author: Gabriel Becker [aut] (original creator of the package),
   Adrian Waddell [aut],
-  Davide Garolini [aut],
-  Emily de la Rua [aut],
-  Abinaya Yogasekaram [ctb],
+  Davide Garolini [aut] (<https://orcid.org/0000-0002-1445-1369>),
+  Emily de la Rua [aut] (<https://orcid.org/0009-0000-8738-5561>),
+  Abinaya Yogasekaram [ctb] (<https://orcid.org/0009-0005-2083-1105>),
   Joe Zhu [aut, cre] (<https://orcid.org/0000-0001-7566-2787>),
   F. Hoffmann-La Roche AG [cph, fnd]
 Maintainer: Joe Zhu <joe.zhu@roche.com>
 Repository: CRAN
-Date/Publication: 2025-01-09 00:40:07 UTC
+Date/Publication: 2025-04-09 09:40:22 UTC

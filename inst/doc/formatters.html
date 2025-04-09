@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gabriel Becker" />
 
-<meta name="date" content="2025-01-08" />
+<meta name="date" content="2025-04-08" />
 
 <title>Introduction to the formatters package</title>
 
@@ -62,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to the formatters package</h1>
 <h4 class="author">Gabriel Becker</h4>
-<h4 class="date">2025-01-08</h4>
+<h4 class="date">2025-04-08</h4>
 
 
 
@@ -393,12 +393,15 @@ $`2d`
 [19] &quot;(xx.xxxx, xx.xxxx)&quot; &quot;xx - xx&quot;            &quot;xx.x - xx.x&quot;       
 [22] &quot;xx.xx - xx.xx&quot;      &quot;xx (xx)&quot;            &quot;xx. (xx.)&quot;         
 [25] &quot;xx.x (xx.x)&quot;        &quot;xx.xx (xx.xx)&quot;      &quot;xx (xx.)&quot;          
-[28] &quot;xx (xx.x)&quot;          &quot;xx (xx.xx)&quot;         &quot;xx.x, xx.x&quot;        
-[31] &quot;xx.x to xx.x&quot;      
+[28] &quot;xx (xx.x)&quot;          &quot;xx (xx.xx)&quot;         &quot;xx. (xx.x)&quot;        
+[31] &quot;xx.x (xx.xx)&quot;       &quot;xx.xx (xx.xxx)&quot;     &quot;xx, xx&quot;            
+[34] &quot;xx.x, xx.x&quot;         &quot;xx.xx, xx.xx&quot;       &quot;xx.x to xx.x&quot;      
 
 $`3d`
 [1] &quot;xx. (xx. - xx.)&quot;          &quot;xx.x (xx.x - xx.x)&quot;      
 [3] &quot;xx.xx (xx.xx - xx.xx)&quot;    &quot;xx.xxx (xx.xxx - xx.xxx)&quot;
+[5] &quot;xx / xx (xx.%)&quot;           &quot;xx / xx (xx.x%)&quot;         
+[7] &quot;xx / xx (xx.xx%)&quot;        
 
 attr(,&quot;info&quot;)
 [1] &quot;xx does not modify the element, and xx. rounds a number to 0 digits&quot;</code></pre>

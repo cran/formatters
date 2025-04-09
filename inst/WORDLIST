@@ -1,4 +1,3 @@
-ORCID
 CDISC
 CPP
 DM
@@ -8,6 +7,7 @@ IEC
 LPP
 MPF
 MPFs
+ORCID
 RTF
 Rua
 Truetype
@@ -17,12 +17,15 @@ decrementing
 formatter
 funder
 getters
+iec
 mandatorily
 monospace
 paginations
 pathing
+peforms
 pre
 repo
+sas
 subtable
 subtables
 truetype

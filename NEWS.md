@@ -1,3 +1,9 @@
+## formatters 0.5.11
+* Fixed a bug in `mform_handle_newlines` that caused string matrix column names to be removed. This prevented paginated listing key column info from being repeated when vertically spanning multiple pages.
+* Fixed a minor bug with the `paginate` argument in the `export_as_rtf` function.
+* Added `round_type` argument to indicate `IEC` (default) or `SAS` (nearest value, 5 goes up) rounding to all formatting machinery.
+* Added support for new 2- and 3-d formats.
+
 ## formatters 0.5.10
 * Fixed a bug in `mf_update_cinfo` causing an error when `export_as_txt` was applied to empty listings.
 * Fixed a bug in `mform_handle_newlines` that did not allow printing to console a table that has top left information, new lines in the column names and contained only one row.
