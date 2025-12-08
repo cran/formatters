@@ -44,11 +44,13 @@ mform_handle_newlines <- function(matform) {
 
   # pre-proc in case of wrapping and \n
   line_grouping <- mf_lgrouping(matform)
-  strmat <- .compress_mat(strmat, line_grouping, "nl")
-  frmmat <- .compress_mat(frmmat, line_grouping, "unique") # never not unique
-  spamat <- .compress_mat(spamat, line_grouping, "unique")
-  alimat <- .compress_mat(alimat, line_grouping, "unique")
-  line_grouping <- unique(line_grouping)
+  if (any(duplicated(line_grouping))) {
+    strmat <- .compress_mat(strmat, line_grouping, "nl")
+    frmmat <- .compress_mat(frmmat, line_grouping, "unique") # never not unique
+    spamat <- .compress_mat(spamat, line_grouping, "unique")
+    alimat <- .compress_mat(alimat, line_grouping, "unique")
+    line_grouping <- unique(line_grouping)
+  }
 
   # nlines detects if there is a newline character
   # colwidths = NULL, max_width = NULL, fontspec = NULL
@@ -143,32 +145,42 @@ mform_handle_newlines <- function(matform) {
 
 .quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
-    return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
+    unlist(strsplit(str_v, "\n", fixed = TRUE))
   } else {
-    return(str_v)
+    str_v
   }
 }
 
-# Helper function to recompact the lines following line groupings to then have them expanded again
+#### Helper function to recompact the lines following line groupings to then have them expanded again
+# This version now ensures its output has the exact same row order as the original function.
+# -> see file in `dev/benchmark_compress_mat.R` for a benchmark of the two versions(+).
 .compress_mat <- function(mat, line_grouping, collapse_method = c("nl", "unique")) {
-  list_compacted_mat <- lapply(unique(line_grouping), function(lg) {
-    apply(mat, 2, function(mat_cols) {
-      col_vec <- mat_cols[which(line_grouping == lg)]
-      if (collapse_method[1] == "nl") {
-        paste0(col_vec, collapse = "\n")
-      } else {
-        val <- unique(col_vec)
-        val <- val[nzchar(val)]
-        if (length(val) > 1) {
-          stop("Problem in linegroupings! Some do not have the same values.") # nocov
-        } else if (length(val) < 1) {
-          val <- "" # Case in which it is only ""
-        }
-        val[[1]]
-      }
+  df <- as.data.frame(mat, stringsAsFactors = FALSE)
+
+  # The original function processes groups in the order they appear in `unique(line_grouping)`.
+  # We create a factor with levels set to that specific order to force `split` to maintain it.
+  factor_grouping <- factor(line_grouping, levels = unique(line_grouping))
+  list_of_dfs <- split(df, factor_grouping)
+
+  if (collapse_method[1] == "nl") {
+    result_list <- lapply(list_of_dfs, function(sub_df) {
+      sapply(sub_df, paste, collapse = "\n")
     })
-  })
-  do.call("rbind", list_compacted_mat)
+  } else { # "unique" method
+    result_list <- lapply(list_of_dfs, function(sub_df) {
+      sapply(sub_df, function(col) {
+        val <- unique(col[nzchar(col)])
+        if (length(val) > 1) {
+          stop("Problem in linegroupings! Some do not have the same values.")
+        } else if (length(val) == 0) {
+          ""
+        } else {
+          val
+        }
+      })
+    })
+  }
+  do.call("rbind", result_list)
 }
 
 disp_from_spans <- function(spans) {
@@ -248,6 +260,9 @@ disp_from_spans <- function(spans) {
 #' @param indent_size (`numeric(1)`)\cr number of spaces to be used per level of indent (if supported by
 #'   the relevant method). Defaults to 2.
 #' @param rep_cols (`numeric(1)`)\cr number of columns to be repeated as context during horizontal pagination.
+#' @param round_type (`string`)\cr
+#' The type of rounding to perform. Allowed values: (`"iec"`, `"iec_mod"` or `"sas"`)
+#' See [round_fmt()] for details.
 #'
 #' @return An object of class `MatrixPrintForm`. Currently this is implemented as an S3 class inheriting
 #'   from list with the following elements:
@@ -313,7 +328,9 @@ MatrixPrintForm <- function(strings = NULL,
                             colwidths = NULL,
                             indent_size = 2,
                             fontspec = font_spec(),
-                            rep_cols = 0L) {
+                            rep_cols = 0L,
+                            round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   display <- disp_from_spans(spans)
 
   ncs <- if (has_rowlabs) ncol(strings) - 1 else ncol(strings)
@@ -341,7 +358,8 @@ MatrixPrintForm <- function(strings = NULL,
       indent_size = indent_size,
       col_widths = colwidths,
       fontspec = fontspec,
-      num_rep_cols = rep_cols
+      num_rep_cols = rep_cols,
+      round_type = round_type
     ),
     nrow_header = nrow_header,
     ncols = ncs,
@@ -903,6 +921,9 @@ mf_has_rlabels <- function(mf) ncol(mf$strings) > mf_ncol(mf)
 #' @param num_rep_cols (`numeric(1)`)\cr Number of columns to be treated as repeating columns.
 #'   Defaults to `0` for `basic_matrix_form` and `length(keycols)` for
 #'   `basic_listing_mf`. Note repeating columns are separate from row labels if present.
+#' @param round_type (`string`)\cr
+#' The type of rounding to perform. Allowed values: (`"iec"`, `"iec_mod"` or `"sas"`)
+#' See [round_fmt()] for details.
 #'
 #' @return A valid `MatrixPrintForm` object representing `df` that is ready for
 #'   ASCII rendering.
@@ -938,7 +959,8 @@ basic_matrix_form <- function(df,
                               fontspec = font_spec(),
                               split_labels = NULL,
                               data_labels = NULL,
-                              num_rep_cols = 0L) {
+                              num_rep_cols = 0L,
+                              round_type = valid_round_type) {
   checkmate::assert_data_frame(df)
   checkmate::assert_flag(indent_rownames)
   checkmate::assert_character(parent_path, null.ok = TRUE)
@@ -946,6 +968,7 @@ basic_matrix_form <- function(df,
   checkmate::assert_flag(add_decoration)
   checkmate::assert_character(split_labels, null.ok = TRUE)
   checkmate::assert_character(data_labels, null.ok = TRUE)
+  round_type <- match.arg(round_type)
 
   # Some defaults
   row_classes <- "DataRow" # Default for all rows
@@ -1004,7 +1027,7 @@ basic_matrix_form <- function(df,
   bodystrs <- mapply(function(x, coli_fmt) {
     coli_fmt[coli_fmt == "-"] <- "xx"
     sapply(seq_along(x), function(y) {
-      format_value(x[y], format = coli_fmt[y])
+      format_value(x[y], format = coli_fmt[y], round_type = round_type)
     })
   }, x = df, coli_fmt = fmts)
 
@@ -1099,7 +1122,8 @@ basic_matrix_form <- function(df,
     fontspec = fontspec,
     col_gap = 3,
     indent_size = indent_size,
-    rep_cols = num_rep_cols
+    rep_cols = num_rep_cols,
+    round_type = round_type
   )
 
   # Check for ncols
@@ -1134,7 +1158,9 @@ basic_matrix_form <- function(df,
 basic_listing_mf <- function(df,
                              keycols = names(df)[1],
                              add_decoration = TRUE,
-                             fontspec = font_spec()) {
+                             fontspec = font_spec(),
+                             round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   checkmate::assert_data_frame(df)
   checkmate::assert_subset(keycols, colnames(df))
 
@@ -1144,7 +1170,8 @@ basic_listing_mf <- function(df,
     ignore_rownames = TRUE,
     add_decoration = add_decoration,
     num_rep_cols = length(keycols),
-    fontspec = fontspec
+    fontspec = fontspec,
+    round_type = round_type
   )
 
   # keycols addition to MatrixPrintForm (should happen in the constructor)
