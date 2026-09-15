@@ -12,7 +12,7 @@
 
 <meta name="author" content="Gabriel Becker" />
 
-<meta name="date" content="2025-12-06" />
+<meta name="date" content="2026-09-15" />
 
 <title>Introduction to the formatters package</title>
 
@@ -29,32 +29,46 @@ document.addEventListener('DOMContentLoaded', function(e) {
   }
 });
 </script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 <style type="text/css">
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 
 <style type="text/css">
-code {
-white-space: pre;
-}
-.sourceCode {
-overflow: visible;
-}
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
 </style>
 <style type="text/css" data-origin="pandoc">
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -66,54 +80,55 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-{ counter-reset: source-line 0; }
+  { counter-reset: source-line 0; }
 pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
+  { position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-color: #aaaaaa;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-{ }
+  {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } 
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.at { color: #7d9029; } 
-code span.bn { color: #40a070; } 
-code span.bu { color: #008000; } 
-code span.cf { color: #007020; font-weight: bold; } 
-code span.ch { color: #4070a0; } 
-code span.cn { color: #880000; } 
-code span.co { color: #60a0b0; font-style: italic; } 
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.do { color: #ba2121; font-style: italic; } 
-code span.dt { color: #902000; } 
-code span.dv { color: #40a070; } 
-code span.er { color: #ff0000; font-weight: bold; } 
-code span.ex { } 
-code span.fl { color: #40a070; } 
-code span.fu { color: #06287e; } 
-code span.im { color: #008000; font-weight: bold; } 
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.kw { color: #007020; font-weight: bold; } 
-code span.op { color: #666666; } 
-code span.ot { color: #007020; } 
-code span.pp { color: #bc7a00; } 
-code span.sc { color: #4070a0; } 
-code span.ss { color: #bb6688; } 
-code span.st { color: #4070a0; } 
-code span.va { color: #19177c; } 
-code span.vs { color: #4070a0; } 
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -341,7 +356,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to the formatters package</h1>
 <h4 class="author">Gabriel Becker</h4>
-<h4 class="date">2025-12-06</h4>
+<h4 class="date">2026-09-15</h4>
 
 
 
@@ -352,30 +367,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 ##     %||%</code></pre>
 <div id="formatters" class="section level1">
 <h1>formatters</h1>
-<p>The <code>formatters</code> package provides two core pieces of
-functionality, both related to ASCII rendering:</p>
+<p>The <code>formatters</code> package provides two core pieces of functionality, both related to ASCII rendering:</p>
 <ol style="list-style-type: decimal">
-<li><code>format_value</code> provides the ability to format single- and
-multi-valued elements into ASCII display-ready strings</li>
-<li>the <code>matrix_form</code> framework provides generics for
-implementing ASCII rendering support for display tables</li>
+<li><code>format_value</code> provides the ability to format single- and multi-valued elements into ASCII display-ready strings</li>
+<li>the <code>matrix_form</code> framework provides generics for implementing ASCII rendering support for display tables</li>
 </ol>
-<p><strong>Both of these feature sets are used in the
-<code>rtables</code> package.</strong></p>
+<p><strong>Both of these feature sets are used in the <code>rtables</code> package.</strong></p>
 </div>
 <div id="formatting-values" class="section level1">
 <h1>Formatting values</h1>
-<p>The core motivation for <code>formatters</code> is the rendering of
-reporting tables into ASCII. In this context a ‘value’ is the raw
-content that to appear in a single table cell. Most commonly this is a
-numeric vector of length 1, 2 or – occasionally – 3.</p>
+<p>The core motivation for <code>formatters</code> is the rendering of reporting tables into ASCII. In this context a ‘value’ is the raw content that to appear in a single table cell. Most commonly this is a numeric vector of length 1, 2 or – occasionally – 3.</p>
 <div id="format-labels" class="section level2">
 <h2>Format labels</h2>
-<p><code>formatters</code> ships with a large number of pre-defined
-formats appropriate for rendering values into ASCII strings. These
-existing formats are specified by their labels. We can see the list of
-these by calling the <code>list_valid_format_labels</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">list_valid_format_labels</span>()</span></code></pre></div>
+<p><code>formatters</code> ships with a large number of pre-defined formats appropriate for rendering values into ASCII strings. These existing formats are specified by their labels. We can see the list of these by calling the <code>list_valid_format_labels</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">list_valid_format_labels</span>()</span></code></pre></div>
 <pre><code>$`1d`
  [1] &quot;xx&quot;                 &quot;xx.&quot;                &quot;xx.x&quot;              
  [4] &quot;xx.xx&quot;              &quot;xx.xxx&quot;             &quot;xx.xxxx&quot;           
@@ -406,97 +411,80 @@ $`3d`
 
 attr(,&quot;info&quot;)
 [1] &quot;xx does not modify the element, and xx. rounds a number to 0 digits&quot;</code></pre>
-<p>Each of these labels describes how the incoming (possibly
-multi-element) raw value will be formatted. <code>xx</code> indicates
-that an element of the value will be printed as is, with no
-modification. <code>xx.</code> indicates that a numeric value element
-will be rounded to 0 decimal places, <code>xx.x</code> indicates
-rounding to 1 decimal place, etc.</p>
+<p>Each of these labels describes how the incoming (possibly multi-element) raw value will be formatted. <code>xx</code> indicates that an element of the value will be printed as is, with no modification. <code>xx.</code> indicates that a numeric value element will be rounded to 0 decimal places, <code>xx.x</code> indicates rounding to 1 decimal place, etc.</p>
 </div>
 <div id="formatting-values-1" class="section level2">
 <h2>Formatting values</h2>
-<p>Values are formatted via calls to <code>format_value</code>, like
-so:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fl">5.1235</span>, <span class="at">format =</span> <span class="st">&quot;xx.xx&quot;</span>)</span></code></pre></div>
+<p>Values are formatted via calls to <code>format_value</code>, like so:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">format_value</span>(<span class="fl">5.1235</span>, <span class="dt">format =</span> <span class="st">&quot;xx.xx&quot;</span>)</span></code></pre></div>
 <pre><code>[1] &quot;5.12&quot;</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">format_value</span>(<span class="fu">c</span>(<span class="fl">1.2355</span>, <span class="fl">2.6789</span>), <span class="st">&quot;(xx.xx, xx.xx)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">format_value</span>(<span class="kw">c</span>(<span class="fl">1.2355</span>, <span class="fl">2.6789</span>), <span class="st">&quot;(xx.xx, xx.xx)&quot;</span>)</span></code></pre></div>
 <pre><code>[1] &quot;(1.24, 2.68)&quot;</code></pre>
 </div>
 </div>
 <div id="table-rendering-framework" class="section level1">
 <h1>Table Rendering Framework</h1>
-<p><strong>Advanced Usage Only</strong> These features are supported,
-and in fact are used in <code>rtables</code> and the experimental
-<code>rlistings</code>. That said, the API is currently very low-level
-and tailored to what <code>rtables</code> and <code>rlistings</code>
-need. How useful this is to other table frameworks may vary.</p>
-<p>The second major piece of functionality in <code>formatters</code> is
-the ability to render tables into ASCII (and thus directly to the
-terminal) based on a so-called <code>MatrixPrintForm</code>
-representation of the table.</p>
-<p>To hook up <code>rtables</code>-style ASCII display for your tables,
-it suffices to export a method for the exported <code>matrix_form</code>
-generic <code>formatters</code> provides. This method must return a
-<code>MatrixPrintForm</code> object representing your table.</p>
-<p>We can build a baby example method for <code>data.frames</code> to
-illustrate this process:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## pagdfrow supports a large number of pieces of information regarding</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="do">## siblings and what information should be repeated after a pagination.</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## we ignore all that here and just give the absolutely crucial info:</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="do">## nm (name), lab (label), rnum (absolute row position), pth (&quot;path&quot;),</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">## extent (how many lines it takes up), rclass (&quot;class of row&quot;)</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>fake_pagdf_row <span class="ot">&lt;-</span> <span class="cf">function</span>(i, rnms) {</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  nm <span class="ot">&lt;-</span> rnms[i]</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">pagdfrow</span>(</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="at">nm =</span> nm, <span class="at">lab =</span> nm, <span class="at">rnum =</span> i, <span class="at">pth =</span> nm, <span class="at">extent =</span> <span class="dv">1</span><span class="dt">L</span>,</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="at">rclass =</span> <span class="st">&quot;NA&quot;</span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  )</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>}</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>matrix_form.data.frame <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  fmts <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, <span class="cf">function</span>(x) <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">obj_format</span>(x))) <span class="st">&quot;xx&quot;</span> <span class="cf">else</span> <span class="fu">obj_format</span>(x))</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  bodystrs <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(x, fmt) {</span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="fu">sapply</span>(x, format_value, <span class="at">format =</span> fmt)</span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>  }, <span class="at">x =</span> df, <span class="at">fmt =</span> fmts)</span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>  rnms <span class="ot">&lt;-</span> <span class="fu">row.names</span>(df)</span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(rnms)) {</span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    rnms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seq_len</span>(<span class="fu">NROW</span>(df)))</span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>  }</span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  cnms <span class="ot">&lt;-</span> <span class="fu">names</span>(df)</span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>  strings <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, cnms),</span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>    <span class="fu">cbind</span>(rnms, bodystrs)</span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>  )</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>  fnr <span class="ot">&lt;-</span> <span class="fu">nrow</span>(strings)</span>
-<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>  fnc <span class="ot">&lt;-</span> <span class="fu">ncol</span>(strings)</span>
-<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a></span>
-<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>  <span class="do">## center alignment for column labels, left alignment for everything else</span></span>
-<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>  aligns <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>    <span class="st">&quot;center&quot;</span>,</span>
-<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>    <span class="fu">matrix</span>(<span class="st">&quot;left&quot;</span>, <span class="at">nrow =</span> <span class="fu">NROW</span>(df), <span class="at">ncol =</span> fnc)</span>
-<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>  )</span>
-<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a></span>
-<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a>  <span class="do">## build up fake pagination df,</span></span>
-<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a>  rowdf <span class="ot">&lt;-</span> <span class="fu">basic_pagdf</span>(<span class="fu">row.names</span>(df))</span>
-<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a>  <span class="fu">MatrixPrintForm</span>(</span>
-<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a>    <span class="at">strings =</span> strings,</span>
-<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a>    <span class="at">aligns =</span> aligns,</span>
-<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a>    <span class="at">spans =</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="at">nrow =</span> fnr, <span class="at">ncol =</span> fnc),</span>
-<span id="cb9-49"><a href="#cb9-49" tabindex="-1"></a>    <span class="at">formats =</span> <span class="fu">matrix</span>(<span class="st">&quot;&quot;</span>, <span class="at">nrow =</span> fnr, <span class="at">ncol =</span> fnc),</span>
-<span id="cb9-50"><a href="#cb9-50" tabindex="-1"></a>    <span class="at">row_info =</span> rowdf,</span>
-<span id="cb9-51"><a href="#cb9-51" tabindex="-1"></a>    <span class="at">has_topleft =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-52"><a href="#cb9-52" tabindex="-1"></a>    <span class="at">nlines_header =</span> <span class="dv">1</span>,</span>
-<span id="cb9-53"><a href="#cb9-53" tabindex="-1"></a>    <span class="at">nrow_header =</span> <span class="dv">1</span></span>
-<span id="cb9-54"><a href="#cb9-54" tabindex="-1"></a>  )</span>
-<span id="cb9-55"><a href="#cb9-55" tabindex="-1"></a>}</span>
-<span id="cb9-56"><a href="#cb9-56" tabindex="-1"></a></span>
-<span id="cb9-57"><a href="#cb9-57" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">toString</span>(<span class="fu">matrix_form.data.frame</span>(mtcars)))</span></code></pre></div>
+<p><strong>Advanced Usage Only</strong> These features are supported, and in fact are used in <code>rtables</code> and the experimental <code>rlistings</code>. That said, the API is currently very low-level and tailored to what <code>rtables</code> and <code>rlistings</code> need. How useful this is to other table frameworks may vary.</p>
+<p>The second major piece of functionality in <code>formatters</code> is the ability to render tables into ASCII (and thus directly to the terminal) based on a so-called <code>MatrixPrintForm</code> representation of the table.</p>
+<p>To hook up <code>rtables</code>-style ASCII display for your tables, it suffices to export a method for the exported <code>matrix_form</code> generic <code>formatters</code> provides. This method must return a <code>MatrixPrintForm</code> object representing your table.</p>
+<p>We can build a baby example method for <code>data.frames</code> to illustrate this process:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co">## pagdfrow supports a large number of pieces of information regarding</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="co">## siblings and what information should be repeated after a pagination.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="co">## we ignore all that here and just give the absolutely crucial info:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="co">## nm (name), lab (label), rnum (absolute row position), pth (&quot;path&quot;),</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">## extent (how many lines it takes up), rclass (&quot;class of row&quot;)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>fake_pagdf_row &lt;-<span class="st"> </span><span class="cf">function</span>(i, rnms) {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>  nm &lt;-<span class="st"> </span>rnms[i]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>  <span class="kw">pagdfrow</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    <span class="dt">nm =</span> nm, <span class="dt">lab =</span> nm, <span class="dt">rnum =</span> i, <span class="dt">pth =</span> nm, <span class="dt">extent =</span> 1L,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>    <span class="dt">rclass =</span> <span class="st">&quot;NA&quot;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>  )</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>}</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>matrix_form.data.frame &lt;-<span class="st"> </span><span class="cf">function</span>(df) {</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a>  fmts &lt;-<span class="st"> </span><span class="kw">lapply</span>(df, <span class="cf">function</span>(x) <span class="cf">if</span> (<span class="kw">is.null</span>(<span class="kw">obj_format</span>(x))) <span class="st">&quot;xx&quot;</span> <span class="cf">else</span> <span class="kw">obj_format</span>(x))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true"></a>  bodystrs &lt;-<span class="st"> </span><span class="kw">mapply</span>(<span class="cf">function</span>(x, fmt) {</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true"></a>    <span class="kw">sapply</span>(x, format_value, <span class="dt">format =</span> fmt)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true"></a>  }, <span class="dt">x =</span> df, <span class="dt">fmt =</span> fmts)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true"></a>  rnms &lt;-<span class="st"> </span><span class="kw">row.names</span>(df)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true"></a>  <span class="cf">if</span> (<span class="kw">is.null</span>(rnms)) {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true"></a>    rnms &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">seq_len</span>(<span class="kw">NROW</span>(df)))</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true"></a>  }</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true"></a>  cnms &lt;-<span class="st"> </span><span class="kw">names</span>(df)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true"></a>  strings &lt;-<span class="st"> </span><span class="kw">rbind</span>(</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true"></a>    <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, cnms),</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true"></a>    <span class="kw">cbind</span>(rnms, bodystrs)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true"></a>  )</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true"></a>  fnr &lt;-<span class="st"> </span><span class="kw">nrow</span>(strings)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true"></a>  fnc &lt;-<span class="st"> </span><span class="kw">ncol</span>(strings)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true"></a>  <span class="co">## center alignment for column labels, left alignment for everything else</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true"></a>  aligns &lt;-<span class="st"> </span><span class="kw">rbind</span>(</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true"></a>    <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true"></a>    <span class="kw">matrix</span>(<span class="st">&quot;left&quot;</span>, <span class="dt">nrow =</span> <span class="kw">NROW</span>(df), <span class="dt">ncol =</span> fnc)</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true"></a>  )</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true"></a>  <span class="co">## build up fake pagination df,</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true"></a>  rowdf &lt;-<span class="st"> </span><span class="kw">basic_pagdf</span>(<span class="kw">row.names</span>(df))</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true"></a>  <span class="kw">MatrixPrintForm</span>(</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true"></a>    <span class="dt">strings =</span> strings,</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true"></a>    <span class="dt">aligns =</span> aligns,</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true"></a>    <span class="dt">spans =</span> <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">nrow =</span> fnr, <span class="dt">ncol =</span> fnc),</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true"></a>    <span class="dt">formats =</span> <span class="kw">matrix</span>(<span class="st">&quot;&quot;</span>, <span class="dt">nrow =</span> fnr, <span class="dt">ncol =</span> fnc),</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true"></a>    <span class="dt">row_info =</span> rowdf,</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true"></a>    <span class="dt">has_topleft =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true"></a>    <span class="dt">nlines_header =</span> <span class="dv">1</span>,</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true"></a>    <span class="dt">nrow_header =</span> <span class="dv">1</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true"></a>  )</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true"></a>}</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true"></a><span class="kw">cat</span>(<span class="kw">toString</span>(<span class="kw">matrix_form.data.frame</span>(mtcars)))</span></code></pre></div>
 <pre><code>                      mpg    cyl   disp    hp    drat    wt     qsec    vs   am   gear   carb
 —————————————————————————————————————————————————————————————————————————————————————————————
 Mazda RX4             21     6     160     110   3.9    2.62    16.46   0    1    4      4   
